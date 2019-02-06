@@ -1,7 +1,9 @@
 package com.nfcs.singularity.core.domain;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity()
 @Table(name = "usr")
@@ -20,6 +22,7 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
     public Long getId() {
         return id;
     }
@@ -52,6 +55,32 @@ public class User {
         this.roles = roles;
     }
 
-    @OneToMany()
-    private List<Role> roles;
+    @ManyToMany
+    @JoinTable(name="user_roles",
+            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+    )
+    private List<Role> roles = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", activated=" + activated +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }
