@@ -3,4 +3,9 @@ Is a base functionality to administer Your current universe before Big Bang and 
 
 Users, their rights, production landscape - count of server instances, their monitoring, database for each module.
 
-Only Gods has access to administer core.
+*Only Gods has access to administer core*
+
+---
+You can start Singularity Core by maven:
+
+__mvn spring-boot:run__
