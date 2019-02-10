@@ -10,24 +10,15 @@ Users, their rights, production landscape - count of server instances, their mon
 
 *Most common cases are with Spring Cloud Config - use bootstrap.properties to address config server and place Your config into it's git.*
 
-<code>server.port=8081
-
-management.endpoints.web.exposure.include=*
-
-spring.security.user.name=admin
-
-spring.security.user.password=admin
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-
-spring.datasource.username=postgres
-
-spring.datasource.password=postgres
-
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
-
-spring.jpa.hibernate.ddl-auto = update
-</code>
+<code>server.port=8081</code>
+<code>management.endpoints.web.exposure.include=*</code>
+<code>spring.security.user.name=admin</code>
+<code>spring.security.user.password=admin</code>
+<code>spring.datasource.url=jdbc:postgresql://localhost:5432/postgres</code>
+<code>spring.datasource.username=postgres</code>
+<code>spring.datasource.password=postgres</code>
+<code>spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect</code>
+<code>spring.jpa.hibernate.ddl-auto = update</code>
 
 *postgres can be installed with docker*
 
