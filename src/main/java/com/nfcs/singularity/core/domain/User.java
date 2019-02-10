@@ -7,10 +7,7 @@ import java.util.Objects;
 
 @Entity()
 @Table(name = "usr")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class User extends BaseEntity {
     private String username;
     private boolean activated;
     private String password;

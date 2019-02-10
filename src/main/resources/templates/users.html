@@ -23,7 +23,8 @@
                                                                                     class="form-control input-lg"/>
             </div>
             <div class="form-group">
-                <select th:field="*{roles}" class="form-control">
+                <label th:for="roles">Roles:</label>
+                <select th:field="*{roles}" class="form-control" name="roles" multiple="true">
                     <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"/>
                 </select>
             </div>
@@ -52,7 +53,7 @@
                 </td>
                 <td>
                     <form>
-                        <div><label><input type="checkbox" th:checked="${user.activated}" readonly="true"/></label>
+                        <div><label><input type="checkbox" th:checked="${user.activated}" readonly="readonly"/></label>
                         </div>
                     </form>
                 </td>

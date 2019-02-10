@@ -1,8 +1,15 @@
 package com.nfcs.singularity.core.repos;
 
 import com.nfcs.singularity.core.domain.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RolesRepo extends JpaRepository<Role, Long> {
+public interface RolesRepo extends BaseRepo<Role, Long> {
+    default Role create() {
+        return new Role();
+    }
+
+    default String entityName() {
+        return Role.class.getSimpleName().toLowerCase() + "s";
+    }
+
     Role findByName(String name);
 }

@@ -1,7 +1,15 @@
 package com.nfcs.singularity.core.repos;
 
 import com.nfcs.singularity.core.domain.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsersRepo extends JpaRepository<User, Long> {
+public interface UsersRepo extends BaseRepo<User, Long> {
+    default User create() {
+        return new User();
+    }
+
+    default String entityName() {
+        return User.class.getSimpleName().toLowerCase() + "s";
+    }
+
+    User findByUsername(String username);
 }
