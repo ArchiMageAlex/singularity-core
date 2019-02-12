@@ -5,7 +5,6 @@ import com.nfcs.singularity.core.domain.User;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
 import com.nfcs.singularity.core.repos.UsersRepo;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.constraints.NotNull;
 import java.util.logging.Logger;
 
 @Controller
@@ -24,7 +22,7 @@ public class UserController extends BaseController<User> {
     @Autowired
     RolesRepo rr;
 
-    public UserController(@Autowired UsersRepo br) {
+    public UserController(@Autowired BaseRepo<User, Long> br) {
         super(br);
     }
 
@@ -33,7 +31,7 @@ public class UserController extends BaseController<User> {
         model.addObject("roles", rr.findAll(pageableRoles));
         model.addObject("users", br.findAll(pageableUsers));
         model.addObject("user", new User());
-        model.setViewName("/users");
+        model.setViewName(this.getViewName(User.class));
         return model;
     }
 
@@ -55,7 +53,7 @@ public class UserController extends BaseController<User> {
         model.addObject("roles", rr.findAll());
         model.addObject("users", br.findAll());
         model.addObject("user", user);
-        model.setViewName("/users");
+        model.setViewName(this.getViewName(User.class));
 
         return model;
     }

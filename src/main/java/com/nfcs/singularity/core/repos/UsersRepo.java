@@ -7,9 +7,5 @@ public interface UsersRepo extends BaseRepo<User, Long> {
         return new User();
     }
 
-    default String entityName() {
-        return User.class.getSimpleName().toLowerCase() + "s";
-    }
-
     User findByUsername(String username);
 }

@@ -1,8 +1,10 @@
 package com.nfcs.singularity.core;
 
 import com.nfcs.singularity.core.domain.Role;
+import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,7 +15,8 @@ import java.util.logging.Logger;
 public class CoreApplication {
     private static Logger log = Logger.getLogger(CoreApplication.class.getName());
     @Autowired
-    RolesRepo rr;
+    @Qualifier("rolesRepo")
+    BaseRepo<Role, Long> rr;
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
@@ -21,7 +24,7 @@ public class CoreApplication {
 
     @PostConstruct
     private void post() {
-        Role role = (Role) rr.findByName("USER");
+        Role role = ((RolesRepo) rr).findByName("USER");
 
         if (role == null) {
             role = new Role();

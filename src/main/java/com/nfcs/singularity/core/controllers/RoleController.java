@@ -1,6 +1,7 @@
 package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.Role;
+import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/roles")
 public class RoleController extends BaseController<Role> {
-    RoleController(@Autowired RolesRepo rr) {
-        super(rr);
+    public RoleController(@Autowired BaseRepo<Role, Long> br) {
+        super(br);
     }
 
     @GetMapping
@@ -19,7 +20,7 @@ public class RoleController extends BaseController<Role> {
         model.addObject("entities", br.findAll());
         model.addObject("entity", br.create());
 
-        model.setViewName( br.entityName());
+        model.setViewName(this.getViewName(Role.class));
         return model;
     }
 }
