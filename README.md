@@ -35,4 +35,4 @@ Users, their rights, production landscape - count of server instances, their mon
 
 __mvn spring-boot:run__
 
-and access it by http://localhost:8081
+and access it at http://localhost:8081
