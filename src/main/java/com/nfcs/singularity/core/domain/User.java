@@ -1,9 +1,7 @@
 package com.nfcs.singularity.core.domain;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity()
 @Table(name = "usr")
@@ -18,14 +16,6 @@ public class User extends BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -44,20 +34,28 @@ public class User extends BaseEntity {
         this.activated = activated;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public Collection<Role> getRoles() {
+        return new HashMap<>(roles).values();
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void addRole(Role role) {
+        if (this.roles.containsKey(role.getName())) return;
+        this.roles.put(role.getName(), role);
+        role.addUser(this);
     }
 
-    @ManyToMany
-    @JoinTable(name="user_roles",
-            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+    public void removeRole(Role role) {
+        this.roles.remove(role.getName());
+        role.removeUser(this);
+    }
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    private List<Role> roles = new ArrayList<>();
+    @MapKey(name = "name")
+    private Map<String, Role> roles = new HashMap<>();
 
     @Override
     public String toString() {
@@ -72,12 +70,13 @@ public class User extends BaseEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId());
+        return getUsername().equals(user.getUsername());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(super.hashCode(), getUsername());
     }
 }

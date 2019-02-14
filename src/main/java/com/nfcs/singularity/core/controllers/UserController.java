@@ -4,15 +4,17 @@ import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
-import com.nfcs.singularity.core.repos.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 @Controller
@@ -37,11 +39,25 @@ public class UserController extends BaseController<User> {
 
     @PostMapping
     public ModelAndView addUser(@ModelAttribute User user, ModelAndView model) throws Exception {
-        if (((UsersRepo) br).findByUsername(user.getUsername()) == null) {
-            Role role = rr.findByName("USER");
+        User user1 = br.findOne(new Example<User>() {
+            @Override
+            public User getProbe() {
+                User user2 = new User();
+                user2.setUsername(user.getUsername());
+                return user2;
+            }
+
+            @Override
+            public ExampleMatcher getMatcher() {
+                return ExampleMatcher.matching();
+            }
+        }).orElse(null);
+
+        if (user1 == null) {
+            Optional<Role> role = rr.getRole("USER");
 
             if (!user.getRoles().contains(role))
-                user.getRoles().add(role);
+                user.getRoles().add(role.get());
 
             br.save(user);
             log.info("Created user: " + user.toString());

@@ -18,7 +18,7 @@ public class RoleController extends BaseController<Role> {
     @GetMapping
     public ModelAndView entities(ModelAndView model) {
         model.addObject("entities", br.findAll());
-        model.addObject("entity", br.create());
+        model.addObject("entity", new Role());
 
         model.setViewName(this.getViewName(Role.class));
         return model;

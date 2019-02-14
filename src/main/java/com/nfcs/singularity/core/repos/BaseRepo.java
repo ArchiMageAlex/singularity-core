@@ -9,5 +9,4 @@ import java.io.Serializable;
 
 @NoRepositoryBean
 public interface BaseRepo<T extends BaseEntity, ID extends Serializable> extends JpaRepository<T, ID> {
-    T create();
 }
