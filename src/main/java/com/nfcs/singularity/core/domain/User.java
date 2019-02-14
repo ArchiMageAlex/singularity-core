@@ -1,7 +1,9 @@
 package com.nfcs.singularity.core.domain;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity()
 @Table(name = "usr")
@@ -9,6 +11,13 @@ public class User extends BaseEntity {
     private String username;
     private boolean activated;
     private String password;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    @MapKey(name = "name")
+    private Map<String, Role> roles = new HashMap<>();
 
     public String getPassword() {
         return password;
@@ -49,14 +58,6 @@ public class User extends BaseEntity {
         role.removeUser(this);
     }
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
-    @MapKey(name = "name")
-    private Map<String, Role> roles = new HashMap<>();
-
     @Override
     public String toString() {
         return "User{" +
@@ -77,6 +78,6 @@ public class User extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getUsername());
+        return super.hashCode();
     }
 }

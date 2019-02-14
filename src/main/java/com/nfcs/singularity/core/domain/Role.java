@@ -4,11 +4,13 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 @Entity
 public class Role extends BaseEntity {
     private String name;
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
+    @MapKey(name = "username")
+    private Map<String, User> users = new HashMap<>();
 
     @Override
     public boolean equals(Object o) {
@@ -21,12 +23,8 @@ public class Role extends BaseEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getName());
+        return super.hashCode();
     }
-
-    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
-    @MapKey(name = "username")
-    private Map<String, User> users = new HashMap<>();
 
     public Collection<User> getUsers() {
         return new HashMap<String, User>(users).values();

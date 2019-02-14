@@ -2,10 +2,10 @@ package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.repos.BaseRepo;
-import com.nfcs.singularity.core.repos.RolesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
