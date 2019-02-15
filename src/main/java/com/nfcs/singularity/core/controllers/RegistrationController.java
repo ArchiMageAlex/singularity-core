@@ -1,6 +1,7 @@
 package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.User;
+import com.nfcs.singularity.core.repos.RolesRepo;
 import com.nfcs.singularity.core.repos.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,8 @@ public class RegistrationController {
 
     @Autowired
     UsersRepo ur;
+    @Autowired
+    RolesRepo rr;
 
     @GetMapping
     public String register(Map<String, Object> model) {
@@ -30,6 +33,8 @@ public class RegistrationController {
     public String register(Map<String, Object> model, @ModelAttribute User user) {
         log.warning("Registered user activated by default. Remove that activation for administer activation later of registration");
         user.setActivated(true);
+        ur.save(user);
+        user.addRole(rr.getRole("USER").orElse(null));
         ur.save(user);
         model.put("users", ur.findAll());
 

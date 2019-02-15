@@ -1,20 +1,16 @@
 package com.nfcs.singularity.core.controllers;
 
-import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
-import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
+import com.nfcs.singularity.core.repos.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Optional;
 import java.util.logging.Logger;
 
 @Controller
@@ -24,7 +20,7 @@ public class UserController extends BaseController<User> {
     @Autowired
     RolesRepo rr;
 
-    public UserController(@Autowired BaseRepo<User, Long> br) {
+    public UserController(@Autowired UsersRepo br) {
         super(br);
     }
 
@@ -39,30 +35,15 @@ public class UserController extends BaseController<User> {
 
     @PostMapping
     public ModelAndView addUser(@ModelAttribute User user, ModelAndView model) throws Exception {
-        User user1 = br.findOne(new Example<User>() {
-            @Override
-            public User getProbe() {
-                User user2 = new User();
-                user2.setUsername(user.getUsername());
-                return user2;
-            }
-
-            @Override
-            public ExampleMatcher getMatcher() {
-                return ExampleMatcher.matching();
-            }
-        }).orElse(null);
+        User user1 = ((UsersRepo) br).getUser(user.getUsername()).orElse(null);
 
         if (user1 == null) {
-            Optional<Role> role = rr.getRole("USER");
-
-            if (!user.getRoles().contains(role))
-                user.getRoles().add(role.get());
-
+            br.save(user);
+            user.addRole(rr.getRole("USER").orElse(null));
             br.save(user);
             log.info("Created user: " + user.toString());
         } else {
-            Exception e = new Exception("User already exist!");
+            Exception e = new Exception("User already exists! " + user1.getUsername());
             throw e;
         }
 
