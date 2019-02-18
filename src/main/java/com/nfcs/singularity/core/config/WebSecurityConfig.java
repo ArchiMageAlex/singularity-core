@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/users").access("hasRole('ADMIN')")
-                .antMatchers("/", "/main", "/resources/**", "/css/**", "/webjars/**", "/register").permitAll()
+                .antMatchers("/", "/main", "/resources/**", "/css/**", "/webjars/**", "/register", "/activate/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
                 .usersByUsernameQuery("select username, password, activated as active from usr where username = ?")
                 .authoritiesByUsernameQuery("select u.username, CONCAT('ROLE_',r.name) \"role\"" +
-                        " from usr u join user_roles ur on u.id=ur.user_id join \"role\" r on ur.role_id=r.id" +
+                        " from usr u join user_roles ur on u.id=ur.user_id join rle r on ur.role_id=r.id" +
                         " where u.username = ?");
     }
 }

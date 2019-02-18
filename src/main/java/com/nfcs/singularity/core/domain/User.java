@@ -4,13 +4,24 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Entity()
 @Table(name = "usr")
 public class User extends BaseEntity {
+    public User() {
+        this.activationCode = UUID.randomUUID().toString();
+    }
+
     private String username;
-    private boolean activated;
+    private boolean activated = false;
+    private String activationCode;
     private String password;
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

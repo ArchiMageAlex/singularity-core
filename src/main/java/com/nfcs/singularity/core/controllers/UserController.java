@@ -4,6 +4,7 @@ import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
+import com.nfcs.singularity.core.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Example;

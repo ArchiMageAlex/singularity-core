@@ -29,4 +29,18 @@ public interface UsersRepo extends BaseRepo<User, Long> {
             }
         };
     }
+
+    default boolean activateUser(String code) {
+        User user = this.findByActivationCode(code);
+
+        if (user == null) {
+            return false;
+        }
+
+        user.setActivated(true);
+        this.save(user);
+        return true;
+    }
+
+    User findByActivationCode(String code);
 }

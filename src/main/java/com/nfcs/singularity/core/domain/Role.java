@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@Table(name = "rle")
 public class Role extends BaseEntity {
     private String name;
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
