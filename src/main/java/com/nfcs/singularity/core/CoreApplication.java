@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
@@ -25,6 +26,9 @@ public class CoreApplication {
 
     @Autowired
     UsersRepo usersRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
@@ -41,7 +45,7 @@ public class CoreApplication {
             user = new User();
             user.setUsername("admin");
             user.setActivated(true);
-            user.setPassword("admin");//new BCryptPasswordEncoder().encode("admin"));
+            user.setPassword(passwordEncoder.encode("admin"));//new BCryptPasswordEncoder().encode("admin"));
             usersRepo.save(user);
             user.addRole(roleUser);
             user.addRole(roleAdmin);
