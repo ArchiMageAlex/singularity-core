@@ -30,11 +30,12 @@ public class RegistrationController {
 
     @PostMapping
     public String register(Map<String, Object> model, @ModelAttribute User user) {
-        user.setActivated(false);
         user = ur.save(user);
-        String message = String.format("Hello, %s! \n" +
+        String message = String.format("Hello, %s! \n\n" +
                 "Welcome to Singularity.\n" +
-                "Please, activate Your account: http://localhost:8080/register/activate/%s", user.getUsername(), user.getActivationCode());
+                "Please, activate Your account: http://localhost:8080/register/activate/%s\n\n" +
+                "Sincerely Yours,\n" +
+                "Singularity Gods Team.", user.getUsername(), user.getActivationCode());
         mailService.send(user.getUsername(), "Activation code", message);
         model.put("users", ur.findAll());
 
