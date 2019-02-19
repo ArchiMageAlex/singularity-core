@@ -4,7 +4,9 @@ import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,5 +24,11 @@ public class RoleController extends BaseController<Role> {
 
         model.setViewName(this.getViewName(Role.class));
         return model;
+    }
+
+    @RequestMapping("/{id}")
+    public String showRoleForm(@PathVariable("id") Role role, Model model) {
+        model.addAttribute("entity", role);
+        return "roleForm";
     }
 }

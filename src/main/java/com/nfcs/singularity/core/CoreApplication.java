@@ -15,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -35,34 +37,14 @@ public class CoreApplication {
     }
 
     @PostConstruct
-    private void post() {
-        Role roleUser = createRole("USER");
-        Role roleAdmin = createRole("ADMIN");
+    private void setup() {
+        List<Role> roles = new ArrayList<>();
+        roles.add(rr.createRole("USER"));
+        log.info("Created role USER");
+        roles.add(rr.createRole("ADMIN"));
+        log.info("Created role ADMIN");
 
-        User user = usersRepo.getUser("admin").orElse(null);
-
-        if (user == null) {
-            user = new User();
-            user.setUsername("admin");
-            user.setActivated(true);
-            user.setPassword(passwordEncoder.encode("admin"));//new BCryptPasswordEncoder().encode("admin"));
-            usersRepo.save(user);
-            user.addRole(roleUser);
-            user.addRole(roleAdmin);
-            usersRepo.save(user);
-            log.info("Created user: " + user.toString());
-        }
-    }
-
-    private Role createRole(String name) {
-        Role role = rr.getRole(name).orElse(null);
-
-        if (role == null) {
-            role = new Role();
-            role.setName(name);
-            role = rr.save(role);
-            log.info("Created role: " + role.toString());
-        }
-        return role;
+        User user = usersRepo.createUser("admin", passwordEncoder.encode("admin"), true, roles);
+        log.info("Created user " + user.toString());
     }
 }
