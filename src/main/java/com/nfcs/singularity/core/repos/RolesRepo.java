@@ -7,8 +7,21 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.exact;
+
 @Repository
 public interface RolesRepo extends BaseRepo<Role, Long> {
+    default Role createRole(String name) {
+        Role role = getRole(name).orElse(null);
+
+        if (role == null) {
+            role = new Role();
+            role.setName(name);
+            role = save(role);
+        }
+
+        return role;
+    }
 
     default Optional<Role> getRole(String roleName) {
         return findOne(getRoleExample(roleName));
@@ -25,7 +38,9 @@ public interface RolesRepo extends BaseRepo<Role, Long> {
 
             @Override
             public ExampleMatcher getMatcher() {
-                return ExampleMatcher.matching();
+                return ExampleMatcher.matching()
+                        .withMatcher("name", exact())
+                        .withIgnoreNullValues();
             }
         };
     }
