@@ -1,5 +1,7 @@
 package com.nfcs.singularity.core.domain;
 
+import org.metawidget.inspector.annotation.UiLabel;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,6 +10,7 @@ import java.util.Map;
 @Entity
 @Table(name = "rle")
 public class Role extends BaseEntity {
+    @UiLabel("Роль")
     private String name;
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
     @MapKey(name = "username")

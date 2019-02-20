@@ -9,10 +9,10 @@
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
         <form method="post" class="form-group" th:object="${entity}">
             <div class="form-group"><label th:for="name">Role name:</label> <input type="text" name="name"
-                                                                                       th:placeholder="name"
-                                                                                       th:field="*{name}"
-                                                                                       class="form-control input-lg"
-                                                                                       id="name"></div>
+                                                                                   th:placeholder="name"
+                                                                                   th:field="*{name}"
+                                                                                   class="form-control input-lg"
+                                                                                   id="name"></div>
             <div class="form-group">
                 <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit">Add role</button>
             </div>
@@ -22,18 +22,19 @@
         <table class="table table-hover table-bordered">
             <thead class="tab-header-area">
             <tr>
-                <td><strong>Id</strong></td>
-                <td><strong>Role name</strong></td>
+                <th th:each="caption:${captions}"
+                    th:style="${caption.hide?'display: none;':''}"><strong>
+                    <div th:text="${caption.label}"></div>
+                </strong></th>
+                <th><strong>Edit</strong></th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="role:${entities}">
-                <td><strong>
-                    <div th:text="${role.id}"></div>
-                </strong></td>
-                <td>
-                    <div th:text="${role.name}"></div>
-                </td>
+            <tr th:each="entity:${entities}">
+                <td th:each="caption:${captions}"
+                    th:style="${caption.hide?'display: none;':''}"
+                    th:text="${__'entity.' + ${caption.name}__}"></td>
+                <td><a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${entity.id})}">Edit</a></td>
             </tr>
             </tbody>
         </table>
@@ -41,9 +42,9 @@
 </div>
 <!-- /.container -->
 <div th:replace="fragments/footer :: footer"/>
-<script type="application/javascript" >
+<script type="application/javascript">
     $(document).ready(function () {
-        $('#submit').on("click", function(e) {
+        $('#submit').on("click", function (e) {
             e.preventDefault();
             var data = {};
             data["name"] = $('#name').val();
@@ -57,7 +58,7 @@
                 timeout: 6000,
                 success: function (data) {
                     //if(confirm("Entity with id:" + data + " saved")) {
-                        window.location.reload();
+                    window.location.reload();
                     //}
                 }
             })

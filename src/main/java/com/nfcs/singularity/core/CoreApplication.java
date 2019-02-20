@@ -2,6 +2,7 @@ package com.nfcs.singularity.core;
 
 import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
+import com.nfcs.singularity.core.generators.CRUDGenerator;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.RolesRepo;
 import com.nfcs.singularity.core.repos.UsersRepo;
@@ -31,6 +32,9 @@ public class CoreApplication {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    CRUDGenerator gen;
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
