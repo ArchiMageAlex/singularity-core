@@ -10,7 +10,7 @@ import java.util.Map;
 @Entity
 @Table(name = "rle", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 public class Role extends BaseEntity {
-    @UiLabel("Роль")
+    @UiLabel("Role name")
     private String name;
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
     @MapKey(name = "username")
