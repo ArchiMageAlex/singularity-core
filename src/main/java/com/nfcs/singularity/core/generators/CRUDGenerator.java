@@ -3,6 +3,7 @@ package com.nfcs.singularity.core.generators;
 import com.nfcs.singularity.core.domain.BaseEntity;
 import org.metawidget.inspector.annotation.UiHidden;
 import org.metawidget.inspector.annotation.UiLabel;
+import org.metawidget.inspector.annotation.UiMasked;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,15 +45,35 @@ public class CRUDGenerator {
         private String label;
         private boolean hide = false;
         private Annotation[] as;
+        private boolean masked = false;
+        private String type = "";
 
         public EntityPropertyLabel(String name, Member m) {
             this.name = name;
             this.label = name;
 
-            if (m instanceof Method)
+            if (m instanceof Method) {
                 this.as = ((Method) m).getAnnotations();
-            else if (m instanceof Field)
+            } else if (m instanceof Field) {
                 this.as = ((Field) m).getAnnotations();
+                this.type = ((Field) m).getType().getSimpleName();
+            }
+        }
+
+        public boolean isMasked() {
+            return masked;
+        }
+
+        public void setMasked(boolean masked) {
+            this.masked = masked;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
         }
 
         public String getLabel() {
@@ -74,18 +95,20 @@ public class CRUDGenerator {
         public EntityPropertyLabel invoke() {
             for (Annotation a : as) {
                 if (a.annotationType().equals(UiHidden.class)) {
-                    hide = true;
+                    this.hide = true;
                 } else if (a.annotationType().equals(UiLabel.class)) {
                     try {
                         Method call = a.annotationType().getMethod("value",
                                 new Class[0]);
                         setLabel((String) call.invoke(a, null));
                     } catch (SecurityException e) {
-                        hide = true;
+                        this.hide = true;
                     } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
+                } else if (a.annotationType().equals(UiMasked.class)) {
+                    this.masked = true;
                 }
             }
 

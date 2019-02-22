@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-@Table(name = "rle")
+@Table(name = "rle", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
 public class Role extends BaseEntity {
     @UiLabel("Роль")
     private String name;

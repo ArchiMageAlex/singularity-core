@@ -7,63 +7,50 @@
 <div th:replace="fragments/header :: header"></div>
 <div class="container">
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-        <form method="post" class="form-group" th:object="${entity}">
-            <div class="form-group"><label th:for="name">Role name:</label> <input type="text" name="name"
-                                                                                   th:placeholder="name"
-                                                                                   th:field="*{name}"
-                                                                                   class="form-control input-lg"
-                                                                                   id="name"></div>
+        <form method="post" class="form-group" th:object="${entity}" id="entityForm" th:action="@{/save}">
+            <div th:each="caption:${captions}" th:if="${!caption.hide}" class="form-group">
+                <label th:text="${caption.label}"></label>
+                <input type="text" th:field="*{__${caption.name}__}" class="form-control input">
+            </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary btn-block" id="submit">Add role</button>
+                <button type="submit" class="btn btn-primary btn-block" id="submit">Save</button>
             </div>
         </form>
     </div>
-    <div>
-        <table class="table table-hover table-bordered">
-            <thead class="tab-header-area">
-            <tr>
-                <th th:each="caption:${captions}"
-                    th:style="${caption.hide?'display: none;':''}"><strong>
-                    <div th:text="${caption.label}"></div>
-                </strong></th>
-                <th><strong>Edit</strong></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="entity:${entities}">
-                <td th:each="caption:${captions}"
-                    th:style="${caption.hide?'display: none;':''}"
-                    th:text="${__'entity.' + ${caption.name}__}"></td>
-                <td><a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${entity.id})}">Edit</a></td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="row"
+         th:include="fragments/entitiesList :: entities-list">
     </div>
 </div>
-<!-- /.container -->
-<div th:replace="fragments/footer :: footer"/>
-<script type="application/javascript">
-    $(document).ready(function () {
-        $('#submit').on("click", function (e) {
-            e.preventDefault();
-            var data = {};
-            data["name"] = $('#name').val();
+<script th:inline="javascript">
+    var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: "/roles/save",
-                data: JSON.stringify(data),
-                dataType: "json",
-                timeout: 6000,
-                success: function (data) {
-                    //if(confirm("Entity with id:" + data + " saved")) {
-                    window.location.reload();
-                    //}
-                }
-            })
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+    };
+
+    /*<![CDATA[*/
+    $("#entityForm").submit(function (e) {
+        e.preventDefault();
+        console.log(JSON.stringify($("#entityForm").serializeArray()));
+        $.ajax({
+            url: $("#entityForm").attr('action') + "?entityClass=" + getUrlParameter("entityClass"),
+            type: 'post',
+            data: $("#entityForm").serializeArray(),
+            success: function (response) {
+                window.location.reload();
+            }
         })
-    })
+    });/*]]>*/
 </script>
+<div th:replace="fragments/footer :: footer"/>
 </body>
 </html>

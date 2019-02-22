@@ -2,8 +2,10 @@ package com.nfcs.singularity.core.repos;
 
 import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +15,17 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 
 @Repository
 public interface UsersRepo extends BaseRepo<User, Long> {
+    /*default PasswordEncoder getPasswordEncoder(@Autowired PasswordEncoder passwordEncoder) {
+        return passwordEncoder;
+    }
+
+    @Override
+    default <S extends User> S save(S s) {
+        s.setPassword(getPasswordEncoder(null).encode(s.getPassword()));
+        s = save(s);
+        return s;
+    }*/
+
     default Optional<User> getUser(String userName) {
         return findOne(getUserExample(userName));
     }

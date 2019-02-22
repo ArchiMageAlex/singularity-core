@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+</head>
+<body>
+<div th:fragment="entities-list" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
+    <table class="table table-hover table-bordered">
+        <thead class="tab-header-area">
+        <tr>
+            <th th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked}">
+                <strong>
+                    <div th:text="${caption.label}"></div>
+                </strong></th>
+            <th><strong>Edit</strong></th>
+            <th><strong>Delete</strong></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entity:${entities}">
+            <td th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked}"
+                th:text="${__'entity.' + ${caption.name}__}"></td>
+            <td><a th:href="@{__${#httpServletRequest.requestURI}__/{id}(id=${entity.id})}">Edit</a></td>
+            <td><a th:href="@{__${#httpServletRequest.requestURI}__/delete/{id}(id=${entity.id})}">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
