@@ -49,7 +49,7 @@
         /*<![CDATA[*/
         $("#entityForm").submit(function (e) {
             e.preventDefault();
-            console.log(JSON.stringify($("#entityForm").serializeArray()));
+
             $.ajax({
                 url: $("#entityForm").attr('action') + "?entityClass=" + getUrlParameter("entityClass") + "&id=" + $("#id").val(),
                 type: 'post',
