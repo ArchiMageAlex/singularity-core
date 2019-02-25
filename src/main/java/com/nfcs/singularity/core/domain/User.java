@@ -16,13 +16,17 @@ public class User extends BaseEntity {
     @NotNull
     @UiLabel("User name")
     private String username;
+
     @UiLabel("Active")
     private boolean activated = false;
+
     @UiLabel("Activation code")
     private String activationCode = UUID.randomUUID().toString();
+
     @UiMasked
     @UiLabel("Password")
     private String password;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
