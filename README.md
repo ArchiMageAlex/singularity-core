@@ -6,7 +6,7 @@ Users, their rights, production landscape - count of server instances, their mon
 *Only Gods has access to administer core*
 
 ---
-##Test environment config (application.properties)
+## Test environment config (application.properties)
 
 *Most common cases are with Spring Cloud Config - use bootstrap.properties to address config server and place Your config into it's git.*
 
@@ -31,7 +31,7 @@ Users, their rights, production landscape - count of server instances, their mon
 *postgres can be installed with docker*
 
 ---
-##Start Singularity Core by maven
+## Start Singularity Core by maven
 
 __mvn spring-boot:run__
 
