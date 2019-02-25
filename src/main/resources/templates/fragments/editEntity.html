@@ -9,6 +9,7 @@
     <form method="post" class="form-group" th:object="${entity}" id="entityForm" th:action="@{/save}">
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <form method="post" class="form-group" th:object="${entity}" id="entityForm" th:action="@{/save}">
+                <input type="hidden" th:field="*{id}" id="id">
                 <div th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked&&caption.type!='boolean'}"
                      class="form-group">
                     <label th:text="${caption.label}"></label>
@@ -24,6 +25,7 @@
                 </div>
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary btn-block" id="submit">Save</button>
+                    <button type="reset" class="btn btn-block" id="cancel">Reset form</button>
                 </div>
             </form>
         </div>
@@ -49,11 +51,11 @@
             e.preventDefault();
             console.log(JSON.stringify($("#entityForm").serializeArray()));
             $.ajax({
-                url: $("#entityForm").attr('action') + "?entityClass=" + getUrlParameter("entityClass"),
+                url: $("#entityForm").attr('action') + "?entityClass=" + getUrlParameter("entityClass") + "&id=" + $("#id").val(),
                 type: 'post',
                 data: $("#entityForm").serializeArray(),
                 success: function (response) {
-                    window.location.reload();
+                    $('#entities-list').html(response);
                 }
             })
         });/*]]>*/
