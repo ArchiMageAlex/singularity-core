@@ -21,7 +21,9 @@
         <tr th:each="entity:${entities}">
             <td th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked}"
                 th:text="${__'entity.' + ${caption.name}__}"></td>
-            <td><a th:href="@{/entities?id={id}&entityClass=User(id=${entity.id})}">Edit</a></td>
+            <td>
+                <a th:href="@{/entities?id={id}&entityClass={class}(id=${entity.id},class=${#httpServletRequest.getParameter('entityClass')})}">Edit</a>
+            </td>
             <td><a th:href="@{/entities/delete?id={id}(id=${entity.id})}">Delete</a></td>
         </tr>
         </tbody>
