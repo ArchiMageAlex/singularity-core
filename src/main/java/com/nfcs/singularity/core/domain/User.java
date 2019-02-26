@@ -33,6 +33,7 @@ public class User extends BaseEntity {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     @MapKey(name = "name")
+    @UiLabel("Roles")
     private Map<String, Role> roles = new HashMap<>();
 
     public String getActivationCode() {

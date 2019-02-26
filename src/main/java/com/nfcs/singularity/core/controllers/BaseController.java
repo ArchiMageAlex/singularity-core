@@ -1,15 +1,19 @@
 package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.BaseEntity;
+import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.generators.CRUDGenerator;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.BaseRepoImpl;
+import com.nfcs.singularity.core.repos.RolesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.WebRequestDataBinder;
@@ -20,6 +24,7 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
 import javax.transaction.Transactional;
+import java.beans.PropertyEditorSupport;
 import java.util.logging.Logger;
 
 @Controller
@@ -80,6 +85,7 @@ public class BaseController<T extends BaseEntity> {
                 entity = (T) br.save(entity);
             }
 
+            model.addAttribute("roles", new BaseRepoImpl(Role.class, entityManager).findAll());
             model.addAttribute("captions", gen.getEntityProperties(entityType.getJavaType()));
             model.addAttribute("entity", entity);
             model.addAttribute("entities", br.findAll());
