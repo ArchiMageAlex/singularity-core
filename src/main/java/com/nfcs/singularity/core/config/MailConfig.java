@@ -49,9 +49,7 @@ public class MailConfig {
         props.setProperty("mail.transport.protocol", protocol);
         props.setProperty("mail.debug", debug);
         props.setProperty("mail.smtp.auth", auth);
-        logger.info("Auth: " + auth);
         props.setProperty("mail.smtp.starttls.enable", starttls);
-
 
         return mailSender;
     }
