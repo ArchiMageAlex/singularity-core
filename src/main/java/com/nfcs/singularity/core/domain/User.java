@@ -5,9 +5,9 @@ import org.metawidget.inspector.annotation.UiMasked;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 @Entity()
@@ -32,9 +32,9 @@ public class User extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    @MapKey(name = "name")
+    @MapKey(name = "id")
     @UiLabel("Roles")
-    private Map<String, Role> roles = new HashMap<>();
+    private List<Role> roles = new ArrayList<>();
 
     public String getActivationCode() {
         return activationCode;
@@ -68,19 +68,28 @@ public class User extends BaseEntity {
         this.activated = activated;
     }
 
-    public Collection<Role> getRoles() {
-        return new HashMap<>(roles).values();
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     public void addRole(Role role) {
-        if (this.roles.containsKey(role.getName())) return;
-        this.roles.put(role.getName(), role);
+        if (this.roles.contains(role)) return;
+        this.roles.add(role);
         role.addUser(this);
     }
 
     public void removeRole(Role role) {
-        this.roles.remove(role.getName());
+        this.roles.remove(role.getId());
         role.removeUser(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
     }
 
     @Override
@@ -92,19 +101,5 @@ public class User extends BaseEntity {
                 "\', activationCode: \'" + activationCode +
                 "\', password: \'" + password +
                 "\'}";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        User user = (User) o;
-        return getUsername().equals(user.getUsername());
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 }

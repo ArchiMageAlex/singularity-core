@@ -5,30 +5,25 @@ import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.generators.CRUDGenerator;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.BaseRepoImpl;
-import com.nfcs.singularity.core.repos.RolesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.WebRequestDataBinder;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
 import javax.transaction.Transactional;
-import java.beans.PropertyEditorSupport;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
-@SessionScope
 public class BaseController<T extends BaseEntity> {
     private static Logger log = Logger.getLogger(BaseController.class.getName());
 
@@ -36,15 +31,13 @@ public class BaseController<T extends BaseEntity> {
     CRUDGenerator gen;
 
     @Autowired
-    GenericWebApplicationContext context;
-
-    @Autowired
     EntityManager entityManager;
 
     @PostMapping(value = "/save",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @Transactional
-    public String save(@RequestParam String entityClass,
+    public String save(@ModelAttribute(name = "entity") T baseEntity,
+                       @RequestParam String entityClass,
                        @RequestParam(required = false) Long id,
                        Model model,
                        WebRequest request) throws Exception {
@@ -85,14 +78,16 @@ public class BaseController<T extends BaseEntity> {
                 entity = (T) br.save(entity);
             }
 
-            model.addAttribute("roles", new BaseRepoImpl(Role.class, entityManager).findAll());
+            List<Role> list = new BaseRepoImpl(Role.class, entityManager).findAll();
+
+            model.addAttribute("roles", list);
             model.addAttribute("captions", gen.getEntityProperties(entityType.getJavaType()));
             model.addAttribute("entity", entity);
             model.addAttribute("entities", br.findAll());
         }
     }
 
-    private BindingResult bindEntity(WebRequest request, BaseEntity entity) {
+    private BindingResult bindEntity(WebRequest request, T entity) {
         WebRequestDataBinder binder = new WebRequestDataBinder(entity);
         binder.bind(request);
         binder.validate();

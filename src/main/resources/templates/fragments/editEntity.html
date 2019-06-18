@@ -11,17 +11,16 @@
             <form method="post" class="form-group" th:object="${entity}" id="entityForm" th:action="@{/save}">
                 <input type="hidden" th:field="*{id}" id="id">
                 <div th:each="caption:${captions}"
-                     th:if="${!caption.hide&&!caption.masked&&caption.type!='boolean'&&caption.type!='Map'}"
+                     th:if="${!caption.hide&&!caption.masked&&caption.type!='boolean'&&caption.type!='List'}"
                      class="form-group">
                     <label th:text="${caption.label}"></label>
                     <input type="text" th:field="*{__${caption.name}__}" class="form-control input">
                 </div>
-                <div th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked&&caption.type=='Map'}"
+                <div th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked&&caption.type=='List'}"
                      class="list-group">
                     <label th:text="${caption.label}"></label>
-                    <select th:field="*{__${caption.name}__}" multiple="multiple">
+                    <select th:field="*{roles}" multiple="multiple">
                         <option th:each="role : ${roles}"
-                                th:field="*{__${caption.name}__}"
                                 th:value="${{role}}"
                                 th:utext="${role.name}" class="list-group-item"></option>
                     </select>

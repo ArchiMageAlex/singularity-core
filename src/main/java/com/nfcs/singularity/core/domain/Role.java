@@ -3,9 +3,9 @@ package com.nfcs.singularity.core.domain;
 import org.metawidget.inspector.annotation.UiLabel;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Entity
 @Table(name = "rle", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
@@ -14,15 +14,15 @@ public class Role extends BaseEntity {
     private String name;
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
     @MapKey(name = "username")
-    private Map<String, User> users = new HashMap<>();
+    private List<User> users = new ArrayList<>();
 
     public Collection<User> getUsers() {
-        return new HashMap<String, User>(users).values();
+        return new ArrayList<User>(users);
     }
 
     public void addUser(User user) {
-        if (users.containsKey(user.getUsername())) return;
-        this.users.put(user.getUsername(), user);
+        if (users.contains(user)) return;
+        this.users.add(user);
         user.addRole(this);
     }
 
