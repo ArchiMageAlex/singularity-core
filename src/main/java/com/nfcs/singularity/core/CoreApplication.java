@@ -39,11 +39,8 @@ public class CoreApplication {
     private void setup() {
         List<Role> roles = new ArrayList<>();
         roles.add(rr.createRole("USER"));
-        log.info("Created role USER");
         roles.add(rr.createRole("ADMIN"));
-        log.info("Created role ADMIN");
-
-        User user = usersRepo.createUser("admin", passwordEncoder.encode("admin"), true, roles);
-        log.info("Created user " + user.toString());
+        rr.flush();
+        usersRepo.createUser("admin", passwordEncoder.encode("admin"), true, roles);
     }
 }

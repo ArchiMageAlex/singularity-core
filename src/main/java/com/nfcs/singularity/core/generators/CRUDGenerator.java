@@ -19,16 +19,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Service
 public class CRUDGenerator {
+    Logger log = Logger.getLogger(CRUDGenerator.class.getName());
+
     @Autowired
     EntityManager em;
 
     public List<EntityPropertyLabel> getEntityProperties(Class<? extends BaseEntity> entityClass) {
         EntityType<?> entity = em.getMetamodel().entity(entityClass);
-        Set<?> attrs = entity.getSingularAttributes();
-        Iterator<?> i = attrs.iterator();
+        Iterator<?> i = entity.getAttributes().iterator();
         List<EntityPropertyLabel> labels = new ArrayList<>();
 
         while (i.hasNext()) {
@@ -57,6 +59,8 @@ public class CRUDGenerator {
             } else if (m instanceof Field) {
                 this.as = ((Field) m).getAnnotations();
                 this.type = ((Field) m).getType().getSimpleName();
+            } else {
+                log.severe("Member is unimplemented: " + m.getName());
             }
         }
 
