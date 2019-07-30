@@ -5,18 +5,10 @@
 </head>
 <body>
 <div th:fragment="footer">
-    <div class="container">
+    <div class="container-fluid ">
         <footer>
             © 2019 ArchiMage
-            <span sec:authorize="!isAuthenticated()">
-                <a th:href="@{/register}">Register</a>
-            </span>
-            <span sec:authorize="!isAuthenticated()"><a th:href="@{/login}">| Sign In</a></span>
-            <span sec:authorize="isAuthenticated()">| Logged user: <span sec:authentication="name"></span> |
-                Roles: <span sec:authentication="principal.authorities"></span> |
-                <a th:href="@{/logout}">Sign Out</a>
-            </span>
-            <script type="text/javascript" src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <script type="text/javascript" src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         </footer>
     </div>
 </div>

@@ -5,7 +5,7 @@ import com.nfcs.singularity.core.repos.UsersRepo;
 import com.nfcs.singularity.core.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +28,7 @@ public class RegistrationController {
     UsersRepo ur;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public String register(Map<String, Object> model) {
@@ -47,7 +47,7 @@ public class RegistrationController {
                 "Singularity Gods Team.", user.getUsername(), user.getActivationCode());
         mailService.send(user.getUsername(), "Activation code", message);
         model.put("users", ur.findAll());
-
+        log.info(message);
         return "/main";
     }
 

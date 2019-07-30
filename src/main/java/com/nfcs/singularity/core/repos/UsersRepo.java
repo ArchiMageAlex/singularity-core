@@ -57,6 +57,7 @@ public interface UsersRepo extends BaseRepo<User, Long> {
         }
 
         user.setActivated(true);
+        user.setActivationCode(null);
         this.save(user);
         return true;
     }
