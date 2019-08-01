@@ -7,12 +7,9 @@
 <div th:replace="fragments/header :: header"></div>
 <div class="container-fluid">
     <div class="row flex-xl-nowrap">
-        <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
-            <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Администрирование пользователей</a>
-        </div>
-        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 starter-template bd-content">
-            <div class="row" th:include="fragments/editEntity :: edit-form"></div>
-            <div class="row" th:include="fragments/entitiesList :: entities-list" id="entities-list"></div>
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+            <div class="col-10" th:include="fragments/editEntity :: edit-form"></div>
+            <div class="col-10" th:include="fragments/entitiesList :: entities-list" id="entities-list"></div>
         </main>
     </div>
 </div>

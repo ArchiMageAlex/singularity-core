@@ -3,6 +3,7 @@ package com.nfcs.singularity.core.domain;
 import org.metawidget.inspector.annotation.UiLabel;
 import org.metawidget.inspector.annotation.UiMasked;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Entity()
 @Table(name = "usr", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
+@RolesAllowed({"USER"})
 public class User extends BaseEntity {
     @NotNull
     @UiLabel("User name")
