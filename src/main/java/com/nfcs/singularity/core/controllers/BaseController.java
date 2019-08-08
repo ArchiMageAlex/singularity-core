@@ -1,6 +1,7 @@
 package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.BaseEntity;
+import com.nfcs.singularity.core.domain.MenuModel;
 import com.nfcs.singularity.core.generators.CRUDGenerator;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.BaseRepoImpl;
@@ -19,13 +20,18 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
 @SessionScope
 public class BaseController<T extends BaseEntity> {
     private static Logger log = Logger.getLogger(BaseController.class.getName());
+
+    @Autowired
+    HttpServletRequest request;
 
     @Autowired
     CRUDGenerator gen;

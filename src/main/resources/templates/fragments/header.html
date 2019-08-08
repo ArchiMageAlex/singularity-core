@@ -16,11 +16,9 @@
         <div id="navbar" class="collapse navbar-collapse">
             <div class="navbar-nav bd-navbar-nav flex-row">
                 <a class="nav-link" th:href="@{/}">Home</a></li>
-
-                <a class="nav-link" th:each="menuItem:${topMenu}" th:href="@{${menuItem.url}}"><div th:text="${menuItem.name}"></div></a>
-<!--
-                <a class="nav-link" th:href="@{/entities?entityClass=User}" sec:authorize="hasRole('ADMIN')">Users</a>
-                <a class="nav-link" th:href="@{/entities?entityClass=Role}" sec:authorize="hasRole('ADMIN')">Roles</a>-->
+                <a class="nav-link" th:each="menuItem:${menuModelList}" th:href="@{${menuItem.url}}">
+                    <div th:text="${menuItem.name}"></div>
+                </a>
             </div>
             <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
                 <a class="nav-link" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
