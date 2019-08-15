@@ -28,9 +28,6 @@ public class CoreApplication {
     UsersRepo usersRepo;
 
     @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-
-    @Autowired
     CRUDGenerator gen;
 
     public static void main(String[] args) {
@@ -47,7 +44,7 @@ public class CoreApplication {
 
         rr.flush();
 
-        User user = usersRepo.createUser("admin", passwordEncoder.encode("admin"), true, roles);
+        User user = usersRepo.createUser("admin", "admin", true, roles);
         log.info("Created user " + user.toString());
 
         usersRepo.flush();

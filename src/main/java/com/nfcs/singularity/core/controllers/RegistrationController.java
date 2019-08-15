@@ -6,6 +6,7 @@ import com.nfcs.singularity.core.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,6 @@ public class RegistrationController {
     @Autowired
     UsersRepo ur;
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
-
     @GetMapping
     public String register(Map<String, Object> model) {
         model.put("user", new User());
@@ -38,7 +36,6 @@ public class RegistrationController {
 
     @PostMapping
     public String register(Map<String, Object> model, @ModelAttribute User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user = ur.save(user);
         String message = String.format("Hello, %s! \n\n" +
                 "Welcome to Singularity.\n" +

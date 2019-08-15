@@ -84,6 +84,7 @@ public class BaseController<T extends BaseEntity> {
 
             if (save) {
                 entity = (T) br.save(entity);
+                br.flush();
             }
 
             model.addAttribute("captions", gen.getEntityProperties(entityType.getJavaType()));
