@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity()
 @Table(name = "usr", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
@@ -29,12 +30,12 @@ public class User extends BaseEntity {
     @UiLabel("Password")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    @MapKey(name = "name")
+    @MapKey(name = "id")
     private Map<String, Role> roles = new HashMap<>();
 
     public String getActivationCode() {
@@ -92,7 +93,8 @@ public class User extends BaseEntity {
                 "\', activated: \'" + activated +
                 "\', activationCode: \'" + activationCode +
                 "\', password: \'" + password +
-                "\'}";
+                "\', roles: \'[" + roles.values().stream().map(Role::getName).collect(Collectors.joining(", ")) +
+                "]\'}";
     }
 
     @Override
