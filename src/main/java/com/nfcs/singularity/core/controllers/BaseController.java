@@ -62,7 +62,7 @@ public class BaseController<T extends BaseEntity> {
         return "entities";
     }
 
-    private void saveEntity(String entityClass, Long id, Model model, WebRequest request, boolean save) throws Exception {
+    private void saveEntity(String entityClass, Long id, Model model, WebRequest request, boolean save /* TODO: Weirrrrd! Solution, I must refactor it*/) throws Exception {
         EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
 
@@ -90,6 +90,8 @@ public class BaseController<T extends BaseEntity> {
             model.addAttribute("captions", gen.getEntityProperties(entityType.getJavaType()));
             model.addAttribute("entity", entity);
             model.addAttribute("entities", br.findAll());
+        } else {
+            log.severe("Entity " + entityClass + "(id=" + id.toString() + ") not saved. Cause - class name not found at metamodel");
         }
     }
 
