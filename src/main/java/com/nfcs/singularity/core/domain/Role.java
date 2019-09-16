@@ -17,6 +17,8 @@ import java.util.Map;
 public class Role extends BaseEntity {
     @UiLabel("Role name")
     private String name;
+
+    @UiLabel("Users list")
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
     @MapKey(name = "username")
     private Map<String, User> users = new HashMap<>();

@@ -36,6 +36,8 @@ public class User extends BaseEntity {
     @UiMasked
     @UiLabel("Password")
     private String password;
+
+    @UiLabel("Roles list")
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.REFRESH, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
