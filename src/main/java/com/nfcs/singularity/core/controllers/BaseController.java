@@ -1,7 +1,6 @@
 package com.nfcs.singularity.core.controllers;
 
 import com.nfcs.singularity.core.domain.BaseEntity;
-import com.nfcs.singularity.core.domain.MenuModel;
 import com.nfcs.singularity.core.generators.CRUDGenerator;
 import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.BaseRepoImpl;
@@ -17,12 +16,13 @@ import org.springframework.web.bind.support.WebRequestDataBinder;
 import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.EntityType;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
@@ -52,6 +52,37 @@ public class BaseController<T extends BaseEntity> {
         saveEntity(entityClass, id, model, request, true);
         return "fragments/entitiesList :: entities-list";
     }
+
+    @GetMapping(value = "entities/delete")
+    @Transactional
+    public ModelAndView delete(@RequestParam String entityClass,
+                               @RequestParam(required = true) Long id,
+                               Model model,
+                               WebRequest request, RedirectAttributes redirectAttributes) throws Exception {
+        EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
+                .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
+
+        if (entityType != null) {
+
+            T entity;
+            BaseRepo br = new BaseRepoImpl(entityType.getJavaType(), entityManager);
+
+            if (id != null) {
+                entity = (T) br.findById(id).orElse(null);
+                entityManager.remove(entity);
+            } else {
+                log.severe("Id is null, what to delete?");
+            }
+        } else {
+            log.severe("Entity " + entityClass + "(id=" + id.toString() + ") not deleted. Cause - class name not found at metamodel");
+        }
+
+        redirectAttributes.addFlashAttribute("entityClass", entityClass);
+        ModelAndView modelAndView = new ModelAndView("redirect:/entities?entityClass=" + entityClass);
+
+        return modelAndView;
+    }
+
 
     @GetMapping("entities")
     public String listEntities(@RequestParam String entityClass,

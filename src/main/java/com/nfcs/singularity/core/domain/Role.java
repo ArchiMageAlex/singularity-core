@@ -23,7 +23,7 @@ public class Role extends BaseEntity {
     @MapKey(name = "username")
     private Map<String, User> users = new HashMap<>();
 
-    @Override
+       @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
