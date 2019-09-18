@@ -1,22 +1,29 @@
 package com.nfcs.singularity.core.domain;
 
 import org.metawidget.inspector.annotation.UiLabel;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
+import javax.annotation.security.RolesAllowed;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
+@Configuration
 @Table(name = "rle", uniqueConstraints = @UniqueConstraint(columnNames = {"name"}))
+@RolesAllowed({"ADMIN"})
 public class Role extends BaseEntity {
     @UiLabel("Role name")
     private String name;
+
+    @UiLabel("Users list")
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER, mappedBy = "roles")
     @MapKey(name = "username")
     private Map<String, User> users = new HashMap<>();
 
-    @Override
+       @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

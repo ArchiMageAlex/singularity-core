@@ -4,29 +4,36 @@
     <div th:fragment="header-css">
         <!-- this is header-css -->
 
-        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="webjars/dist/4.3/css/docs.min.css"/>
         <link rel="stylesheet" type="text/css" th:href="@{css/main.css}"/>
     </div>
 </head>
 <body>
 <div th:fragment="header">
-    <!-- this is header -->
-    <nav class="navbar navbar-inverse">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" th:href="@{/}">Singularity</a>
+    <nav class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+        <a class="navbar-brand" th:href="@{/}">Singularity</a>
+        <div id="navbar" class="collapse navbar-collapse">
+            <div class="navbar-nav bd-navbar-nav flex-row">
+                <a class="nav-link" th:href="@{/}">Home</a></li>
+                <a class="nav-link" th:each="menuItem:${menuModelList}" th:href="@{${menuItem.url}}">
+                    <div th:text="${menuItem.name}"></div>
+                </a>
             </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a th:href="@{/}">Home</a></li>
-                    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/entities?entityClass=User}">Users</a></li>
-                    <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/entities?entityClass=Role}">Roles</a></li>
-                </ul>
+            <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                <a class="nav-link" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
+                <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Sign In</a>
+                <a class="nav-link" href="#" sec:authentication="name"
+                   sec:authorize="isAuthenticated()">anonymous@a.a</a>
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <input class="btn nav-link" type="submit" value="Sign Out"
+                           sec:authorize="isAuthenticated()"/>
+                </form>
             </div>
         </div>
     </nav>
-    <script src="webjars/jquery/1.9.1/jquery.min.js"></script>
-    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="webjars/jquery/3.4.0/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </div>
 
 </body>

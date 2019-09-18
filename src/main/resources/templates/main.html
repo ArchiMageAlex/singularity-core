@@ -6,10 +6,14 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header"/>
-<div class="container">
-    <div class="starter-template">
-        <h1>Singularity template</h1>
-        <h2 sec:authorize="hasRole('ADMIN')"><a th:href="@{/users}">Администрирование пользователей</a></h2>
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
+            <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Администрирование пользователей</a>
+        </div>
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 starter-template bd-content">
+            <h1 class="bd-title">Singularity home</h1>
+        </main>
     </div>
 </div>
 <div th:replace="fragments/footer :: footer"/>

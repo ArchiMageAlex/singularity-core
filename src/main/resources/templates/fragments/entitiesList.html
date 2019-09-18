@@ -24,7 +24,9 @@
             <td>
                 <a th:href="@{/entities?id={id}&entityClass={class}(id=${entity.id},class=${#httpServletRequest.getParameter('entityClass')})}">Edit</a>
             </td>
-            <td><a th:href="@{/entities/delete?id={id}(id=${entity.id})}">Delete</a></td>
+            <td>
+                <a th:href="@{/entities/delete?id={id}&entityClass={class}(id=${entity.id},class=${#httpServletRequest.getParameter('entityClass')})}">Delete</a>
+            </td>
         </tr>
         </tbody>
     </table>

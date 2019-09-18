@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -19,38 +18,36 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     DataSource dataSource;
 
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
+    public BCryptPasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/users").access("hasRole('ADMIN')")
+        http.authorizeRequests()
+                .antMatchers("/users").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/", "/main", "/resources/**", "/css/**", "/webjars/**", "/register", "/register/activate/*")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/login").failureUrl("/login?error")
+                .usernameParameter("username").passwordParameter("password")
                 .permitAll()
                 .and()
-                .logout()
-                .permitAll().logoutSuccessUrl("/");
+                .logout().logoutSuccessUrl("/main").invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/error/403")
+                .and()
+                .csrf();
     }
 
-    /*@Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-*/
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 .passwordEncoder(getPasswordEncoder())
-                .usersByUsernameQuery("select username, password, activated as active from usr where username = ?")
+                .usersByUsernameQuery("select username, password, activated as enabled from usr where username = ?")
                 .authoritiesByUsernameQuery("select u.username, CONCAT('ROLE_',r.name) \"role\"" +
                         " from usr u join user_roles ur on u.id=ur.user_id join rle r on ur.role_id=r.id" +
                         " where u.username = ?");

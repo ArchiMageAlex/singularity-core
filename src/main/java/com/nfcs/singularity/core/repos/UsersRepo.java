@@ -2,10 +2,8 @@ package com.nfcs.singularity.core.repos;
 
 import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,17 +13,6 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 
 @Repository
 public interface UsersRepo extends BaseRepo<User, Long> {
-    /*default PasswordEncoder getPasswordEncoder(@Autowired PasswordEncoder passwordEncoder) {
-        return passwordEncoder;
-    }
-
-    @Override
-    default <S extends User> S save(S s) {
-        s.setPassword(getPasswordEncoder(null).encode(s.getPassword()));
-        s = save(s);
-        return s;
-    }*/
-
     default Optional<User> getUser(String userName) {
         return findOne(getUserExample(userName));
     }
@@ -57,6 +44,7 @@ public interface UsersRepo extends BaseRepo<User, Long> {
         }
 
         user.setActivated(true);
+        user.setActivationCode(null);
         this.save(user);
         return true;
     }
@@ -64,7 +52,7 @@ public interface UsersRepo extends BaseRepo<User, Long> {
     User findByActivationCode(String code);
 
     default User createUser(String username, String password, boolean activated, List<Role> roles) {
-        User user = getUser("admin").orElse(null);
+        User user = getUser(username).orElse(null);
 
         if (user == null) {
             final User user1 = new User();
@@ -72,7 +60,6 @@ public interface UsersRepo extends BaseRepo<User, Long> {
             user1.setActivated(activated);
             user1.setPassword(password);
             user1.setActivationCode(null);
-            save(user1);
             roles.forEach(r -> user1.addRole(r));
             save(user1);
             user = user1;
