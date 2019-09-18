@@ -10,6 +10,11 @@
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
             <div class="col-10" th:include="fragments/editEntity :: edit-form"
                  th:if="${param.id!=null}" id="editEntity"></div>
+            <div class="col-10">
+                <a class="form-control btn btn-primary btn-block" id="submit"
+                   th:href="@{/entities?id=&entityClass={class}(class=${#httpServletRequest.getParameter('entityClass')})}">New
+                    entity</a>
+            </div>
             <div class="col-10" th:include="fragments/entitiesList :: entities-list" id="entities-list"></div>
         </main>
     </div>
