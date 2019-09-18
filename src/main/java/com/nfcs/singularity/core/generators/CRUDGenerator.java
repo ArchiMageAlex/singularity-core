@@ -117,7 +117,6 @@ public class CRUDGenerator {
                     } catch (SecurityException e) {
                         this.hide = true;
                     } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 } else if (a.annotationType().equals(UiMasked.class)) {
