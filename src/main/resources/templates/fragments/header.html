@@ -25,6 +25,7 @@
                 <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Sign In</a>
                 <a class="nav-link" href="#" sec:authentication="name"
                    sec:authorize="isAuthenticated()">anonymous@a.a</a>
+<!--                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">Logout</a>-->
                 <form th:action="@{/logout}" method="post" class="form-inline">
                     <input class="btn nav-link" type="submit" value="Sign Out"
                            sec:authorize="isAuthenticated()"/>

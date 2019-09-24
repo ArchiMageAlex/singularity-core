@@ -24,8 +24,8 @@ public class News extends BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        Role role = (Role) o;
-        return getName().equals(role.getName());
+        News news = (News) o;
+        return getName().equals(news.getName());
     }
 
     @Override

@@ -30,6 +30,9 @@ public class CoreApplication {
     @Autowired
     CRUDGenerator gen;
 
+    @Autowired
+    BCryptPasswordEncoder encoder;
+
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
     }
@@ -44,7 +47,7 @@ public class CoreApplication {
 
         rr.flush();
 
-        User user = usersRepo.createUser("admin", "admin", true, roles);
+        User user = usersRepo.createUser("admin", encoder.encode("admin"), true, roles);
         log.info("Created user " + user.toString());
 
         usersRepo.flush();

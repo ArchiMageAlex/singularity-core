@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/users").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/", "/main", "/resources/**", "/css/**", "/webjars/**", "/register", "/register/activate/*")
+                .antMatchers("/", "/main", "login", "/resources/**", "/css/**", "/webjars/**", "/register", "/register/activate/*")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username").passwordParameter("password")
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/main").invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").permitAll()
+                .logout().logoutSuccessUrl("/").invalidateHttpSession(true).clearAuthentication(true).deleteCookies("JSESSIONID").permitAll()
                 .and()
                 .exceptionHandling().accessDeniedPage("/error/403")
                 .and()

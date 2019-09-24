@@ -3,6 +3,7 @@ package com.nfcs.singularity.core.domain;
 import org.metawidget.inspector.annotation.UiLabel;
 import org.metawidget.inspector.annotation.UiMasked;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class User extends BaseEntity {
     @Transient
     private static Logger LOG = Logger.getLogger(User.class.getName());
     @Transient
-    private static PasswordEncoder passwordEncoder;
+    private static BCryptPasswordEncoder passwordEncoder;
     @NotNull
     @UiLabel("User name")
     private String username;
@@ -47,7 +48,7 @@ public class User extends BaseEntity {
     private Map<String, Role> roles = new HashMap<>();
 
     @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+    public void setPasswordEncoder(BCryptPasswordEncoder passwordEncoder) {
         User.passwordEncoder = passwordEncoder;
     }
 
