@@ -30,6 +30,27 @@ Users, their rights, production landscape - count of server instances, their mon
 
 *postgres can be installed with docker*
 
+
+## For development use H2:
+
+server.port=8081
+
+management.endpoints.web.exposure.include=*
+
+spring.security.user.name=admin
+
+spring.security.user.password=admin
+
+spring.datasource.url=jdbc:h2:mem:testdb
+
+spring.datasource.driverClassName=org.h2.Driver
+
+spring.datasource.username=sa
+
+spring.datasource.password=password
+
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+
 ---
 ## Start Singularity Core by maven
 
