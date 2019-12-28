@@ -3,12 +3,14 @@ package com.nfcs.singularity.core;
 import com.nfcs.singularity.core.domain.Role;
 import com.nfcs.singularity.core.domain.User;
 import com.nfcs.singularity.core.generators.CRUDGenerator;
-import com.nfcs.singularity.core.repos.*;
+import com.nfcs.singularity.core.repos.DefaultRepositoryFactoryBean;
+import com.nfcs.singularity.core.repos.RolesRepo;
+import com.nfcs.singularity.core.repos.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -26,10 +28,10 @@ public class CoreApplication {
     UsersRepo usersRepo;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    CRUDGenerator gen;
 
     @Autowired
-    CRUDGenerator gen;
+    BCryptPasswordEncoder encoder;
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
@@ -43,7 +45,11 @@ public class CoreApplication {
         roles.add(rr.createRole("ADMIN"));
         log.info("Created role ADMIN");
 
-        User user = usersRepo.createUser("admin", passwordEncoder.encode("admin"), true, roles);
+        rr.flush();
+
+        User user = usersRepo.createUser("admin", encoder.encode("admin"), true, roles);
         log.info("Created user " + user.toString());
+
+        usersRepo.flush();
     }
 }

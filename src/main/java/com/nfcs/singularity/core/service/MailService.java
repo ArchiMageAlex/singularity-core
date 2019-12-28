@@ -6,8 +6,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @Service
 public class MailService {
+    private static Logger LOG = Logger.getLogger(MailService.class.getName());
     @Autowired
     private JavaMailSender mailSender;
 
@@ -21,6 +25,10 @@ public class MailService {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
 
-        mailSender.send(mailMessage);
+        try {
+            mailSender.send(mailMessage);
+        } catch(Exception e) {
+            LOG.log(Level.SEVERE, "Mail does not sent", e);
+        }
     }
 }
