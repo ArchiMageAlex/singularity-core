@@ -1,6 +1,7 @@
 package com.nfcs.singularity.core.generators;
 
 import com.nfcs.singularity.core.domain.BaseEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.metawidget.inspector.annotation.UiHidden;
 import org.metawidget.inspector.annotation.UiLabel;
 import org.metawidget.inspector.annotation.UiMasked;
@@ -23,6 +24,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 @Service
+@Slf4j
 public class CRUDGenerator {
     private static Logger LOG = Logger.getLogger(CRUDGenerator.class.getName());
     @Autowired
@@ -108,16 +110,18 @@ public class CRUDGenerator {
         public EntityPropertyLabel invoke() {
             for (Annotation a : as) {
                 if (a.annotationType().equals(UiHidden.class)) {
+                    log.debug("Hide property " + this.name);
                     this.hide = true;
                 } else if (a.annotationType().equals(UiLabel.class)) {
                     try {
-                        Method call = a.annotationType().getMethod("value",
-                                new Class[0]);
+                        Method call = a.annotationType().getMethod("value");
                         setLabel((String) call.invoke(a, null));
+                        log.debug("Set label " + this.label + " for property " + this.name);
                     } catch (SecurityException e) {
+                        log.debug("Can't show property " + this.name + " with annotation: " + a.annotationType().getName(),e);
                         this.hide = true;
                     } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
+                        log.error("Something wrong with reflection", e);
                     }
                 } else if (a.annotationType().equals(UiMasked.class)) {
                     this.masked = true;

@@ -8,9 +8,6 @@
 <div th:replace="fragments/header :: header"/>
 <div class="container-fluid">
     <div class="row flex-xl-nowrap">
-        <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
-            <a th:href="@{/users}" sec:authorize="hasRole('ADMIN')">Администрирование пользователей</a>
-        </div>
         <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 starter-template bd-content">
             <h1 class="bd-title">Singularity home</h1>
         </main>
