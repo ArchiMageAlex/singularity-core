@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <title>CRUD</title>
+    <div th:replace="fragments/header :: header-css"></div>
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+<div class="container-fluid">
+    <div class="row flex-xl-nowrap">
+        <main class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+            <div class="col-10" th:include="fragments/editEntity :: edit-form"
+                 th:if="${param.id!=null}" id="editEntity"></div>
+            <div class="col-10">
+                <a class="form-control btn btn-primary btn-block" id="submit"
+                   th:href="@{/entities?id=&entityClass={class}(class=${#httpServletRequest.getParameter('entityClass')})}">New
+                    entity</a>
+            </div>
+            <div class="col-10" th:include="fragments/entitiesList :: entities-list" id="entities-list"></div>
+            <!--<div class="col-10" th:include="fragments/editEntityMeta :: editMeta-form" id="entityMeta"></div>-->
+        </main>
+    </div>
+    <div class="row flex-lg-wrap">
+        <div class="col-10">
+            <button type="button" value="Администратор модели" id="admin-mode"
+                    onclick="document.getElementById('editor').style.display=document.getElementById('editor').style.display === 'none' ? 'block' : 'none';">Администратор модели
+            </button>
+        </div>
+        <div class="col-10" id="editor" th:text="${code}" style="display: none">
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer :: footer"/>
+
+<script src="ace-builds/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-builds/src-min-noconflict/theme-dracula.js" type="text/javascript" charset="utf-8"></script>
+<script src="ace-builds/src-min-noconflict/mode-java.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/dracula");
+    var JavaMode = ace.require("ace/mode/java").Mode;
+    editor.session.setMode(new JavaMode());
+</script>
+</body>
+</html>

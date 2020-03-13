@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <div th:fragment="header-css">
+        <!-- this is header-css -->
+
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" th:href="@{css/main.css}"/>
+    </div>
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-expand navbar-dark bg-dark flex-column flex-md-row bd-navbar">
+        <a class="navbar-brand" th:href="@{/}">Singularity</a>
+        <div id="navbar" class="collapse navbar-collapse">
+            <div class="navbar-nav bd-navbar-nav flex-row">
+                <a class="nav-link" th:href="@{/}">Home</a></li>
+                <a class="nav-link" th:each="menuItem:${menuModelList}" th:href="@{${menuItem.url}}">
+                    <div th:text="${menuItem.name}"></div>
+                </a>
+            </div>
+            <div class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+                <a class="nav-link" th:href="@{/register}" sec:authorize="!isAuthenticated()">Register</a>
+                <a class="nav-link" th:href="@{/login}" sec:authorize="!isAuthenticated()">Sign In</a>
+                <a class="nav-link" href="#" sec:authentication="name"
+                   sec:authorize="isAuthenticated()">anonymous@a.a</a>
+<!--                <a class="nav-link" th:href="@{/logout}" sec:authorize="isAuthenticated()">Logout</a>-->
+                <form th:action="@{/logout}" method="post" class="form-inline">
+                    <input class="btn nav-link" type="submit" value="Sign Out"
+                           sec:authorize="isAuthenticated()"/>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <script src="webjars/jquery/3.4.0/jquery.min.js"></script>
+    <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</div>
+
+</body>
+</html>
