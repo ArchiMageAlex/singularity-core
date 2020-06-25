@@ -156,4 +156,12 @@
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <url>https://github.com/ArchiMageAlex/singularity-core</url>
+        </repository>
+
+    </distributionManagement>
+
 </project>
