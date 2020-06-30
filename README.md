@@ -1,5 +1,5 @@
 # Singularity Core
-Main ideas of project:
+Main project ideas:
 
 1. Entities are accessible through UI by @Entity and @RolesAllowed annotations without additional configurations
 2. Entities has default CRUD with rich intelligent UI
