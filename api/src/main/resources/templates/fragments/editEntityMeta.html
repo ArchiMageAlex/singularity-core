@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Edit</title>
 </head>
-<body>
 <div th:fragment="editMeta-form" xmlns:th="http://www.thymeleaf.org" th:remove="tag">
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
         <form method="post" class="form-group" th:object="${entity}" id="entityMetaForm" th:action="@{/save}">
@@ -58,5 +57,4 @@
         /*]]>*/
     </script>
 </div>
-</body>
 </html>

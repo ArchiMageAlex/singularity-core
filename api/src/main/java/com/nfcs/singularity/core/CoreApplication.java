@@ -75,14 +75,14 @@ public class CoreApplication {
         User user = usersRepo.createUser("admin", encoder.encode("admin"), true, roles);
         log.debug("Created user " + user.toString());
         usersRepo.flush();
-        initRepository();
     }
 
     @Bean
     public Repository initRepository() throws IOException {
         if (null == repo) {
+            log.info("Current dir: {}", System.getProperty("user.dir"));
             FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
-            Repository repository = repositoryBuilder.setGitDir(new File("./.git"))
+            Repository repository = repositoryBuilder.setGitDir(new File("../.git"))
                     .readEnvironment() // scan environment GIT_* variables
                     .findGitDir() // scan up the file system tree
                     .setMustExist(true)

@@ -132,7 +132,7 @@ public class BaseController<T extends BaseEntity> {
             model.addAttribute("entity", entity);
             model.addAttribute("entities", br.findAll());
             model.addAttribute("code", getCode(repository.getDirectory().getParentFile()
-                    , "src.main.java." + entityType.getJavaType().getName()));
+                    , "api.src.main.java." + entityType.getJavaType().getName()));
         } else {
             log.error("Entity " + entityClass + "(id=" + id.toString()
                     + ") not saved. Cause - class name not found at metamodel");

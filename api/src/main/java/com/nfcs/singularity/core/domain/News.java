@@ -8,15 +8,15 @@ import javax.persistence.Entity;
 @Entity
 @RolesAllowed({"ADMIN"})
 public class News extends BaseEntity {
-    @UiLabel("Name")
-    private String name;
+    @UiLabel("Text")
+    private String text;
 
-    public String getName() {
-        return name;
+    public String getText() {
+        return text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setText(String name) {
+        this.text = name;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class News extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         News news = (News) o;
-        return getName().equals(news.getName());
+        return getText().equals(news.getText());
     }
 
     @Override
