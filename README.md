@@ -1,9 +1,9 @@
 # Singularity Core
 
-##Purpose
+## Purpose
 To make development so simple as a simple web-site
 
-##Ideas
+## Ideas
 1. Entities are accessible through UI by @Entity and @RolesAllowed annotations without additional configurations
 2. Entities has default CRUD with rich intelligent UI, generated automatically at runtime.
 3. Entity class must be placed at the special git repository using built-in UI for version management, or using regular git client.
