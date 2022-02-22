@@ -11,10 +11,18 @@ To make development so simple as a simple web-site
 5. Business services/activities accessible through UI by @BusinessService and @RolesAllowed annotations without additional configurations.
 
 ## Prerequisites to develop
+- git 2.35+ __https://git-scm.com/downloads__
 - maven 3.3+ __https://maven.apache.org/download.cgi__
 - JDK 1.7+ __https://jdk.java.net/17/__
 
 ## Start Singularity Core by maven
-1. chdir to __singularity-core__
-2. execute __mvn spring-boot:run__
-3. access url __http://localhost:8081__
+1. Clone git repository __https://github.com/ArchiMageAlex/singularity-core.git__:
+
+   git clone https://github.com/ArchiMageAlex/singularity-core.git
+2. chdir to __singularity-core__:
+    
+    cd singularity-core
+3. execute:
+
+    mvn spring-boot:run
+5. access url __http://localhost:8081__
