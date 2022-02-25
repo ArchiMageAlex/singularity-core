@@ -21,11 +21,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 @SpringBootApplication
 @EnableJpaRepositories(repositoryFactoryBeanClass = DefaultRepositoryFactoryBean.class)
@@ -34,11 +32,11 @@ import java.util.logging.Logger;
 public class CoreApplication {
     @Value("${com.nfcs.singularity.core.repositoryPath}")
     String repositoryPath;
-    private Repository repo;
     RolesRepo rr;
     UsersRepo usersRepo;
     CRUDGenerator gen;
     BCryptPasswordEncoder encoder;
+    private Repository repo;
 
     public static void main(String[] args) {
         SpringApplication.run(CoreApplication.class, args);
@@ -82,7 +80,7 @@ public class CoreApplication {
         if (null == repo) {
             log.info("Current dir: {}", System.getProperty("user.dir"));
             FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
-            Repository repository = repositoryBuilder.setGitDir(new File("../.git"))
+            Repository repository = repositoryBuilder.setGitDir(new File(System.getProperty("user.dir") + "/.git"))
                     .readEnvironment() // scan environment GIT_* variables
                     .findGitDir() // scan up the file system tree
                     .setMustExist(true)
