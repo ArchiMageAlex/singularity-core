@@ -5,7 +5,7 @@
     <title>Edit</title>
 </head>
 <div th:fragment="entities-list" xmlns:th="http://www.thymeleaf.org" th:remove="tag" id="entities-list">
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered col-xl">
         <thead class="tab-header-area">
         <tr>
             <th th:each="caption:${captions}" th:if="${!caption.hide&&!caption.masked}">
