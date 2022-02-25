@@ -19,10 +19,11 @@ To make development so simple as a simple web-site
 1. Clone git repository __https://github.com/ArchiMageAlex/singularity-core.git__:
 
    git clone https://github.com/ArchiMageAlex/singularity-core.git
-2. chdir to __singularity-core__:
+2. Change to directory __singularity-core__:
     
     cd singularity-core
-3. execute:
+3. Execute:
 
     mvn spring-boot:run
-5. access url __http://localhost:8081__
+4. Access url __http://localhost:8081__
+5. Sign in with admin/admin
