@@ -6,6 +6,7 @@ import com.nfcs.singularity.core.repos.BaseRepo;
 import com.nfcs.singularity.core.repos.BaseRepoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.jgit.lib.Repository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -139,15 +140,11 @@ public class BaseController<T extends BaseEntity> {
         }
     }
 
-    private String getCode(File directory, String name) {
-        if (name.indexOf('.') < 0) {
-            File file = Objects.requireNonNull(directory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String checkName) {
-                    log.debug("Test for file/dir with name {}", checkName);
-                    return checkName.equals(name + ".java");
-                }
-            }))[0];
+    private String getCode(File directory, @NotNull String name) {
+        if (name.indexOf('.') < 0) { // TODO: What? Let's fix it for more clear code
+            log.debug("Search for file {}.java", name);
+            FilenameFilter filter = (dir, checkName) -> checkName.equals(name + ".java");
+            File file = Objects.requireNonNull(directory.listFiles(filter))[0];
 
             String code = null;
 
@@ -165,13 +162,8 @@ public class BaseController<T extends BaseEntity> {
                     , name.substring(0, name.indexOf('.'))
                     , name.substring(name.indexOf('.') + 1)
                     , name);
-            return getCode(Objects.requireNonNull(directory.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File dir, String checkName) {
-                    log.debug("Test for file/dir with name {}", checkName);
-                    return checkName.equals(name.substring(0, name.indexOf('.')));
-                }
-            }))[0], name.substring(name.indexOf('.') + 1));
+            FilenameFilter filter = (dir, checkName) -> checkName.equals(name.substring(0, name.indexOf('.')));
+            return getCode(Objects.requireNonNull(directory.listFiles(filter))[0], name.substring(name.indexOf('.') + 1));
         }
     }
 
