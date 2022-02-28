@@ -21,9 +21,6 @@ import java.util.List;
 @Slf4j
 @Configuration
 public class AppConfig {
-    @Value("${com.nfcs.singularity.core.repositoryPath}")
-    String repositoryPath;
-    private Repository repo;
 
     public AppConfig(RolesRepo rr, UsersRepo usersRepo, BCryptPasswordEncoder encoder) {
         List<Role> roles = new ArrayList<>();
@@ -35,24 +32,5 @@ public class AppConfig {
         User user = usersRepo.createUser("admin", encoder.encode("admin"), true, roles);
         log.debug("Created user " + user.toString());
         usersRepo.flush();
-    }
-
-    @Bean
-    public Repository initRepository() throws IOException {
-        if (null == repo) {
-            log.debug("Current dir: {}", System.getProperty("user.dir"));
-            FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
-            Repository repository = repositoryBuilder.setGitDir(new File(System.getProperty("user.dir") + "/.git"))
-                    .readEnvironment() // scan environment GIT_* variables
-                    .findGitDir() // scan up the file system tree
-                    .setMustExist(true)
-                    .build();
-            log.debug("Having repository: " + repository.getDirectory());
-            Ref head = repository.exactRef("refs/heads/master");
-            log.debug("Ref of refs/heads/master: " + head);
-            this.repo = repository;
-        }
-
-        return this.repo;
     }
 }
