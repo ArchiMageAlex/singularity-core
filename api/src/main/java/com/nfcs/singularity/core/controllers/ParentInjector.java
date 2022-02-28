@@ -11,11 +11,26 @@ import java.util.List;
 
 @ControllerAdvice()
 public class ParentInjector {
-    @Autowired
     HttpServletRequest request;
+    EntityManager em;
+
+    public HttpServletRequest getRequest() {
+        return request;
+    }
 
     @Autowired
-    EntityManager em;
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public EntityManager getEm() {
+        return em;
+    }
+
+    @Autowired
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
 
     @ModelAttribute
     public List<MenuModel> injectParent() {
