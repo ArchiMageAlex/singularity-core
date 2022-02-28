@@ -141,7 +141,8 @@ public class BaseController<T extends BaseEntity> {
     }
 
     private String getCode(File directory, @NotNull String name) {
-        if (name.indexOf('.') < 0) { // TODO: What? Let's fix it for more clear code
+        // Java types path contains "." instead of "/", if we not found ".", then it is a file
+        if (name.indexOf('.') < 0) {
             log.debug("Search for file {}.java", name);
             FilenameFilter filter = (dir, checkName) -> checkName.equals(name + ".java");
             File file = Objects.requireNonNull(directory.listFiles(filter))[0];
