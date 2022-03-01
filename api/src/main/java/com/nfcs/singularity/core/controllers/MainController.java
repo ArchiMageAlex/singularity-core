@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 @Controller("/")
 @Configuration
 public class MainController {
-    private static Logger log = Logger.getLogger(MainController.class.getName());
+/*    private static Logger log = Logger.getLogger(MainController.class.getName());
     private static TrustManagerFactory tmf;
     private static SSLContext ctx;
     private static TrustManager[] trustAllCerts = new TrustManager[]{
@@ -49,17 +49,7 @@ public class MainController {
                 public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {
                 }
             }};
-    @Value("${mail.username}")
-    private String username;
-    @Value("${mail.password}")
-    private String password;
-    @Value("${mail.server}")
-    private String server;
-    @Value("${mail.certificateFilePath}")
-    private String certificateFilePath;
-    @Value("${mail.certificatePass}")
-    private String certificatePass;
-
+*/
     @GetMapping({"/"})
     public String home(Map<String, Object> model) {
         return "main";
@@ -67,7 +57,7 @@ public class MainController {
 
     @GetMapping("/login")
     public String login() {
-        log.info("### Start mail send ###");
+/*        log.info("### Start mail send ###");
         ExchangeService service = new CustomExchangeService(ExchangeVersion.Exchange2010_SP2);
         ExchangeCredentials credentials = new WebCredentials(username, password);
         service.setCredentials(credentials);
@@ -83,12 +73,12 @@ public class MainController {
             log.info("### Mail was sent ###");
         } catch (Exception e) {
             log.log(Level.SEVERE, "Mail doesn't sent", e);
-        }
+        }*/
 
         return "login";
     }
 
-    private void prepareExchangeConnection() throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, KeyManagementException {
+/*    private void prepareExchangeConnection() throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, KeyManagementException {
         KeyStore ks = KeyStore.getInstance("PKCS12");
         ks.load(new FileInputStream(certificateFilePath), certificatePass.toCharArray());
 
@@ -99,5 +89,5 @@ public class MainController {
         ProtocolSocketFactory psf = new SSLProtocolSocketFactory();
         Protocol https = new Protocol("https", psf, 443);
         Protocol.registerProtocol("https", https);
-    }
+    }*/
 }

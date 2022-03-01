@@ -80,7 +80,7 @@ public class BaseController<T extends BaseEntity> {
                        WebRequest request,
                        GitRepository gitRepository) throws Exception {
         saveEntity(entityClass, id, model, request, true, gitRepository);
-        return "fragments/entitiesList :: entities-list";
+        return "fragments/entitiesList::entities-list";
     }
 
     @GetMapping(value = "entities/delete")
@@ -126,7 +126,7 @@ public class BaseController<T extends BaseEntity> {
             , Long id
             , Model model
             , WebRequest request
-            , boolean save /* TODO: Weirrrrd! Solution, I must refactor it*/
+            , boolean save // TODO: Weird solution, I must refactor it
             , GitRepository gitRepository) throws Exception {
         EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
