@@ -19,4 +19,4 @@ steps:
     mavenAuthenticateFeed: false
     effectivePomSkip: false
     sqMavenPluginVersionChoice: 'latest'
-    goals: 'package'
+    goals: 'install'
