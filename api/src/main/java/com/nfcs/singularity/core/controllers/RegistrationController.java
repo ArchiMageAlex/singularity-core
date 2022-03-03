@@ -5,11 +5,12 @@ import com.nfcs.singularity.core.repos.UsersRepo;
 import com.nfcs.singularity.core.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -31,11 +32,11 @@ public class RegistrationController {
     @GetMapping
     public String register(Map<String, Object> model) {
         model.put("user", new User());
-        return "/register";
+        return "register";
     }
 
     @PostMapping
-    public String register(Map<String, Object> model, @ModelAttribute User user) {
+    public ModelAndView register(ModelAndView model, @ModelAttribute User user, RedirectAttributes redirectAttributes) {
         user = ur.save(user);
         String message = String.format("Hello, %s! \n\n" +
                 "Welcome to Singularity.\n" +
@@ -43,20 +44,29 @@ public class RegistrationController {
                 "Sincerely Yours,\n" +
                 "Singularity Gods Team.", user.getUsername(), user.getActivationCode());
         mailService.send(user.getUsername(), "Activation code", message);
-        model.put("users", ur.findAll());
+
+        redirectAttributes.addAttribute("message", "Activation code sent, please check e-mail (from rA)");
+        RedirectView redirectView = new RedirectView("/");
+        redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        model.setView(redirectView);
         log.info(message);
-        return "/main";
+        return model;
     }
 
     @GetMapping("/activate/{code}")
-    public String activate(@PathVariable String code, Model model) {
+    public ModelAndView activate(@PathVariable String code, ModelAndView model, RedirectAttributes redirectAttributes) {
         boolean isActivated = ur.activateUser(code);
 
         if (isActivated) {
-            model.addAttribute("message", "User successfully activated");
+            redirectAttributes.addAttribute("message", "User successfully activated");
         } else {
-            model.addAttribute("message", "Activation code is not found!");
+            redirectAttributes.addAttribute("message", "Activation code is not found!");
         }
-        return "redirect:/main";
+
+        redirectAttributes.addAttribute("user", model.getModelMap().getAttribute("user"));
+        RedirectView redirectView = new RedirectView("/");
+        redirectView.setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+        model.setView(redirectView);
+        return model;
     }
 }

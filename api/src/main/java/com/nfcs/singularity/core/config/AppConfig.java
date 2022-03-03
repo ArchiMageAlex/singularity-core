@@ -5,16 +5,9 @@ import com.nfcs.singularity.core.domain.User;
 import com.nfcs.singularity.core.repos.RolesRepo;
 import com.nfcs.singularity.core.repos.UsersRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
