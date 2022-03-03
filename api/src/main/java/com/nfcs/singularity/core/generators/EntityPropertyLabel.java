@@ -76,10 +76,11 @@ public class EntityPropertyLabel {
 
     public EntityPropertyLabel invoke() {
         for (Annotation a : as) {
-            if (a.annotationType().equals(UiHidden.class)) {
-                log.debug("Hide property " + this.name);
-                this.hide = true;
-            } else if (a.annotationType().equals(UiLabel.class)) {
+            this.masked = a.annotationType().equals(UiMasked.class);
+            this.large = a.annotationType().equals(UiLarge.class);
+            this.hide = a.annotationType().equals(UiHidden.class);
+
+            if (a.annotationType().equals(UiLabel.class)) {
                 try {
                     Method call = a.annotationType().getMethod("value");
                     setLabel((String) call.invoke(a, null));
@@ -90,10 +91,6 @@ public class EntityPropertyLabel {
                 } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                     log.error("Something wrong with reflection", e);
                 }
-            } else if (a.annotationType().equals(UiMasked.class)) {
-                this.masked = true;
-            }else if (a.annotationType().equals(UiLarge.class)) {
-                this.large = true;
             }
         }
 
