@@ -15,15 +15,43 @@ To make development so simple as a simple web-site
 - maven 3.3+ __https://maven.apache.org/download.cgi__
 - JDK 1.7+ __https://jdk.java.net/17/__
 
-## Start Singularity Core by maven
-1. Clone git repository __https://github.com/ArchiMageAlex/singularity-core.git__:
+## Start Singularity Core build with maven
+1. Clone git repository:
 
    git clone https://github.com/ArchiMageAlex/singularity-core.git
-2. Change to directory __singularity-core__:
+2. Change to directory:
     
     cd singularity-core
 3. Execute:
 
-    mvn spring-boot:run
+    mvn clean package spring-boot:run
 4. Access url __http://localhost:8081__
 5. Sign in with admin/admin
+
+## Start Singularity Core with docker, built with maven
+1. Clone git repository:
+
+   git clone https://github.com/ArchiMageAlex/singularity-core.git
+2. Change to directory:
+
+   cd singularity-core
+3. Execute:
+
+    mvn clean package docker:build
+4. Execute:
+
+    docker run -p 8081:8081 -e spring_mail_username=_your_email@your_domain.com_ -e spring_mail_password=_your_password_ -t singularity-core:latest 
+5. Access url __http://localhost:8081__
+6. Sign in with admin/admin
+
+## Start Singularity Core with docker only
+1. Unpack zip archive from here __https://github.com/ArchiMageAlex/singularity-core/archive/refs/heads/master.zip__
+2. cd to singularity-core-master
+3. Execute:
+   
+    docker buildx build .
+4. Execute:
+   
+    docker run -p 8081:8081 -e spring_mail_username=_your_email@your_domain.com_ -e spring_mail_password=_your_password_ -t singularity-core:latest
+5. Access url __http://localhost:8081__
+6. Sign in with admin/admin
