@@ -1,5 +1,6 @@
 package com.nfcs.singularity.core.repos;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -19,7 +20,7 @@ public class DefaultRepositoryFactory extends JpaRepositoryFactory {
     }
 
     @Override
-    protected RepositoryComposition.RepositoryFragments getRepositoryFragments(RepositoryMetadata metadata) {
+    protected RepositoryComposition.@NotNull RepositoryFragments getRepositoryFragments(@NotNull RepositoryMetadata metadata) {
         RepositoryComposition.RepositoryFragments fragments = super.getRepositoryFragments(metadata);
 
         if (BaseRepo.class.isAssignableFrom(
@@ -28,7 +29,7 @@ public class DefaultRepositoryFactory extends JpaRepositoryFactory {
             JpaEntityInformation<?, Serializable> entityInformation =
                     getEntityInformation(metadata.getDomainType());
 
-            Object queryableFragment = getTargetRepositoryViaReflection(
+            Object queryableFragment = instantiateClass(
                     BaseRepoImpl.class, entityInformation, entityManager);
 
             fragments = fragments.append(RepositoryFragment.implemented(queryableFragment));
