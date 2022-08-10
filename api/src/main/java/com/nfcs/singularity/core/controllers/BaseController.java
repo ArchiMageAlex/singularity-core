@@ -92,13 +92,14 @@ public class BaseController<T extends BaseEntity> {
         EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
 
+
         if (entityType != null) {
 
             T entity;
-            BaseRepo br = new BaseRepoImpl(entityType.getJavaType(), entityManager);
+            BaseRepo<T, Long> br = new BaseRepoImpl<>(entityType.getJavaType(), entityManager);
 
             if (id != null) {
-                entity = (T) br.findById(id).orElse(null);
+                entity = br.findById(id).orElse(null);
                 entityManager.remove(entity);
             } else {
                 log.error("Id is null, what to delete?");
@@ -108,9 +109,8 @@ public class BaseController<T extends BaseEntity> {
         }
 
         redirectAttributes.addFlashAttribute("entityClass", entityClass);
-        ModelAndView modelAndView = new ModelAndView("redirect:/entities?entityClass=" + entityClass);
 
-        return modelAndView;
+        return new ModelAndView("redirect:/entities?entityClass=" + entityClass);
     }
 
     @GetMapping("entities")
@@ -133,10 +133,10 @@ public class BaseController<T extends BaseEntity> {
 
         if (entityType != null) {
             T entity;
-            BaseRepo br = new BaseRepoImpl(entityType.getJavaType(), entityManager);
+            BaseRepo<T, Long> br = new BaseRepoImpl<T, Long>(entityType.getJavaType(), entityManager);
 
             if (id != null) {
-                entity = (T) br.findById(id).orElse(null);
+                entity = br.findById(id).orElse(null);
 
                 if (entity == null)
                     throw new Exception("Entity with id=" + id + " not found");
