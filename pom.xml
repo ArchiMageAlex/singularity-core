@@ -242,13 +242,13 @@
             <url>https://mvnrepository.com/artifact/org.eclipse.jgit/org.eclipse.jgit</url>
         </repository>
     </repositories>
-
+<!--
     <distributionManagement>
         <repository>
             <id>github</id>
             <url>https://github.com/ArchiMageAlex/singularity-core</url>
         </repository>
 
-    </distributionManagement>
+    </distributionManagement>-->
 
 </project>
