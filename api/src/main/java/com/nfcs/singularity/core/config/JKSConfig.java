@@ -13,24 +13,25 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @Slf4j
-@Configuration
+@Service
 public class JKSConfig {
     private static final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
 
-    @Value("${com.nfcs.jssecacerts}")
-    String jssecacerts = "cacerts";
+    private static String toHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 3);
+        for (int b : bytes) {
+            b &= 0xff;
+            sb.append(HEXDIGITS[b >> 4]);
+            sb.append(HEXDIGITS[b & 15]);
+            sb.append(' ');
+        }
+        return sb.toString();
+    }
 
-    @Value("${spring.mail.host}")
-    String host;
-
-    @Value("${spring.mail.port}")
-    int port;
-
-    @Value("${com.nfcs.jks.passphrase}")
-    char[] passphrase;
-
-    @Bean
-    public void initJKSConfig() throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, KeyManagementException {
+    public JKSConfig(@Value("${spring.mail.host}") String host,
+                     @Value("${spring.mail.port}") int port,
+                     @Value("${com.nfcs.jssecacerts}") String jssecacerts,
+                     @Value("${com.nfcs.jks.passphrase}") char[] passphrase) throws IOException, KeyStoreException, CertificateException, NoSuchAlgorithmException, KeyManagementException {
         File file = new File(jssecacerts);
 
         if (!file.isFile()) {
@@ -111,17 +112,6 @@ public class JKSConfig {
 
         log.debug(cert.toString());
         log.debug("Added certificate to keystore {} using alias {}", jssecacerts, alias);
-    }
-
-    private static String toHexString(byte[] bytes) {
-        StringBuilder sb = new StringBuilder(bytes.length * 3);
-        for (int b : bytes) {
-            b &= 0xff;
-            sb.append(HEXDIGITS[b >> 4]);
-            sb.append(HEXDIGITS[b & 15]);
-            sb.append(' ');
-        }
-        return sb.toString();
     }
 
     private static class SavingTrustManager implements X509TrustManager {

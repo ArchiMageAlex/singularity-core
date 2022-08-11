@@ -19,15 +19,21 @@ import java.util.logging.Logger;
 @RequestMapping("/register")
 public class RegistrationController {
     private static Logger log = Logger.getLogger(RegistrationController.class.getName());
-
-    @Autowired
     Environment env;
-
-    @Autowired
     MailService mailService;
-
-    @Autowired
     UsersRepo ur;
+
+    public void setEnv(@Autowired Environment env) {
+        this.env = env;
+    }
+
+    public void setMailService(@Autowired MailService mailService) {
+        this.mailService = mailService;
+    }
+
+    public void setUr(@Autowired UsersRepo ur) {
+        this.ur = ur;
+    }
 
     @GetMapping
     public String register(Map<String, Object> model) {

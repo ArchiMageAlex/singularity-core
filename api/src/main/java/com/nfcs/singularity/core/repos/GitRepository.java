@@ -5,9 +5,8 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,9 +17,8 @@ import java.util.Objects;
 
 @Slf4j
 @Configuration
+@Component
 public class GitRepository {
-    @Value("${com.nfcs.singularity.core.repositoryPath}")
-    String repositoryPath;
     private Repository repository;
 
     public GitRepository() throws IOException {
