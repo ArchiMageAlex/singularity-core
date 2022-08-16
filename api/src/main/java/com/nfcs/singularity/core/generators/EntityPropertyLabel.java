@@ -76,9 +76,9 @@ public class EntityPropertyLabel {
 
     public EntityPropertyLabel invoke() {
         for (Annotation a : as) {
-            this.masked = a.annotationType().equals(UiMasked.class);
-            this.large = a.annotationType().equals(UiLarge.class);
-            this.hide = a.annotationType().equals(UiHidden.class);
+            this.masked = a.annotationType().equals(UiMasked.class)?true:this.masked;
+            this.large = a.annotationType().equals(UiLarge.class)?true:this.large;
+            this.hide = a.annotationType().equals(UiHidden.class)?true:this.hide;
 
             if (a.annotationType().equals(UiLabel.class)) {
                 try {
@@ -86,7 +86,7 @@ public class EntityPropertyLabel {
                     setLabel((String) call.invoke(a, null));
                     log.debug("Set label " + this.label + " for property " + this.name);
                 } catch (SecurityException e) {
-                    log.debug("Can't show property " + this.name + " with annotation: " + a.annotationType().getName(), e);
+                    log.debug("Shouldn't show property " + this.name + " with annotation: " + a.annotationType().getName(), e);
                     this.hide = true;
                 } catch (NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
                     log.error("Something wrong with reflection", e);
