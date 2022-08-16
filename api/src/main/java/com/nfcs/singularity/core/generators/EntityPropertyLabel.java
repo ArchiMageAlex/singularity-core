@@ -76,9 +76,9 @@ public class EntityPropertyLabel {
 
     public EntityPropertyLabel invoke() {
         for (Annotation a : as) {
-            this.masked = a.annotationType().equals(UiMasked.class)?true:this.masked;
-            this.large = a.annotationType().equals(UiLarge.class)?true:this.large;
-            this.hide = a.annotationType().equals(UiHidden.class)?true:this.hide;
+            this.masked = a.annotationType().equals(UiMasked.class) || this.masked;
+            this.large = a.annotationType().equals(UiLarge.class) || this.large;
+            this.hide = a.annotationType().equals(UiHidden.class) || this.hide;
 
             if (a.annotationType().equals(UiLabel.class)) {
                 try {
