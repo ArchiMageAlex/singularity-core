@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,11 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 @Controller
+// TODO: make fields volatile, check SessionScoped beans
 @SessionScope
 @Slf4j
 public class BaseController<T extends BaseEntity> {
     HttpServletRequest request;
-    CRUDGenerator gen;
+    volatile CRUDGenerator gen;
     GenericWebApplicationContext context;
     EntityManager entityManager;
 
@@ -39,13 +39,10 @@ public class BaseController<T extends BaseEntity> {
         return request;
     }
 
+    // TODO SessionScoped?
     @Autowired
     public void setRequest(HttpServletRequest request) {
         this.request = request;
-    }
-
-    public CRUDGenerator getGen() {
-        return gen;
     }
 
     @Autowired
@@ -62,12 +59,7 @@ public class BaseController<T extends BaseEntity> {
         this.context = context;
     }
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    @Autowired
-    public void setEntityManager(EntityManager entityManager) {
+    public void setEntityManager(@Autowired EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
@@ -86,30 +78,28 @@ public class BaseController<T extends BaseEntity> {
     @GetMapping(value = "entities/delete")
     @Transactional
     public ModelAndView delete(@RequestParam String entityClass,
-                               @RequestParam(required = true) Long id,
-                               Model model,
-                               WebRequest request, RedirectAttributes redirectAttributes) throws Exception {
+                               @RequestParam() Long id,
+                               RedirectAttributes redirectAttributes) throws Exception {
         EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
 
+        if (null != entityType) {
+            if (null != id) {
+                T entity;
+                entity = new BaseRepoImpl<>(entityType.getJavaType(), entityManager).findById(id).orElse(null);
 
-        if (entityType != null) {
-
-            T entity;
-            BaseRepo<T, Long> br = new BaseRepoImpl<>(entityType.getJavaType(), entityManager);
-
-            if (id != null) {
-                entity = br.findById(id).orElse(null);
-                entityManager.remove(entity);
+                if (null != entity)
+                    entityManager.remove(entity);
+                else
+                    log.error("Entity {} with id {} can't be deleted. Cause - id not found", entityClass, id);
             } else {
-                log.error("Id is null, what to delete?");
+                log.error("Id of type {} is null, what to delete?", entityType);
             }
         } else {
-            log.error("Entity " + entityClass + "(id=" + id.toString() + ") not deleted. Cause - class name not found at metamodel");
+            log.error("Entity {} with id {} can't be deleted. Cause - class name not found at metamodel", entityClass, id);
         }
 
         redirectAttributes.addFlashAttribute("entityClass", entityClass);
-
         return new ModelAndView("redirect:/entities?entityClass=" + entityClass);
     }
 
@@ -128,26 +118,30 @@ public class BaseController<T extends BaseEntity> {
             , WebRequest request
             , boolean save // TODO: Weird solution, I must refactor it
             , GitRepository gitRepository) throws Exception {
+        // TODO: huge metamodel should to slow search
         EntityType<T> entityType = (EntityType<T>) entityManager.getMetamodel().getEntities().stream()
                 .filter(e -> e.getName().equals(entityClass)).findFirst().orElse(null);
 
-        if (entityType != null) {
+        if (null != entityType) {
             T entity;
-            BaseRepo<T, Long> br = new BaseRepoImpl<T, Long>(entityType.getJavaType(), entityManager);
+            BaseRepo<T, Long> br = new BaseRepoImpl<>(entityType.getJavaType(), entityManager);
 
-            if (id != null) {
+            if (null != id) {
                 entity = br.findById(id).orElse(null);
 
-                if (entity == null)
+                if (null == entity)
                     throw new Exception("Entity with id=" + id + " not found");
             } else {
                 entity = entityType.getJavaType().getConstructor().newInstance();
             }
 
-            bindEntity(request, entity);
+            WebRequestDataBinder binder = new WebRequestDataBinder(entity);
+            binder.bind(request);
+            binder.validate();
+            // TODO: Обработать binder.getBindingResult();
 
             if (save) {
-                entity = (T) br.save(entity);
+                entity = br.save(entity);
                 br.flush();
             }
 
@@ -157,15 +151,7 @@ public class BaseController<T extends BaseEntity> {
             model.addAttribute("code", gitRepository.getCode(null
                     , "api.src.main.java." + entityType.getJavaType().getName()));
         } else {
-            log.error("Entity " + entityClass + "(id=" + id.toString()
-                    + ") not saved. Cause - class name not found at metamodel");
+            log.error("Entity {} id {} not saved. Class name not found at metamodel", entityClass, id);
         }
-    }
-
-    private BindingResult bindEntity(WebRequest request, BaseEntity entity) {
-        WebRequestDataBinder binder = new WebRequestDataBinder(entity);
-        binder.bind(request);
-        binder.validate();
-        return binder.getBindingResult();
     }
 }
