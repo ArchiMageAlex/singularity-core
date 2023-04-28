@@ -232,6 +232,16 @@
                     <doUpdate>false</doUpdate>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <to>
+                        <image>singularity-core</image>
+                    </to>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
