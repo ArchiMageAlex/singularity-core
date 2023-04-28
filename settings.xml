@@ -21,6 +21,12 @@
                     <id>github</id>
                     <name>GitHub OWNER Apache Maven Packages</name>
                     <url>https://maven.pkg.github.com/ArchiMageAlex/singularity-core</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
                 </repository>
             </repositories>
         </profile>
